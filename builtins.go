@@ -2,11 +2,13 @@ package etn
 
 import "ethos/types"
 
-type typePair struct {
+//typePair is a struct that contains an interface and a type.Hash
+type typePair struct {	
 	typ interface{}
 	hash types.Hash
 }
 
+//builtins is an array of typePair. It contains all the interfaces of the basic etn types and their hashes
 var builtins = [...]typePair{
 	{int8(0), types.Builtins[types.VINT8].Hash},
 	{uint8(0), types.Builtins[types.VUINT8].Hash},

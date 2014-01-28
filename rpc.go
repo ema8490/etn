@@ -7,12 +7,16 @@ import (
 	"unicode"
 )
 
+//the type id is simply a uint64
 type id uint64
+
+//type header contains a uint64 Call and an id (that is a in fact a uint64)
 type header struct {
 	Id id
 	Call uint64
 }
 
+//type Call, different from Call in type header, contains two interfaces, an os.Error and a boolean Channel
 type Call struct {
 	Args  interface{}
 	Reply interface{}
@@ -20,6 +24,7 @@ type Call struct {
 	Done chan bool
 }
 
+//type callId contains an id
 type callId struct {
 	id id
 	sync.Mutex
