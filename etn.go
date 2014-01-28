@@ -25,15 +25,17 @@ type vmap struct {
 	t reflect.Type
 }
 
+/* Represents the Encoder */
 type Encoder struct {
-	w io.Writer
+	w io.Writer // Writer that writes the encoded data into the buffer "buf"
 	addrToIndex map[uintptr]vmap
 	index int
 	buf []byte
 }
 
+/* Represents the Decoder */
 type Decoder struct {
-	r io.Reader
+	r io.Reader // Reader that reads the decoded data from the buffer "buf"
 	indexToValue []reflect.Value
 	index int
 	buf []byte
