@@ -1,12 +1,15 @@
 package etn
 
+// Type trie contains a byte (used as index) and interface and two pointers to trie type
 type trie struct {
 	index byte
 	value interface{}
-	down, next *trie
+	down, next *trie //down: child, next: sibling
 }
 
+// Function of trie type
 // Find the longest present prefix of b
+// it returns an array of bytes and pointer to a trie variable
 func (t *trie) prefix(b []byte) (s []byte, r *trie) {
 	for r, t = t, t.down; len(b) > 0 && t != nil; {
 		if t.index == b[0] {
@@ -18,6 +21,10 @@ func (t *trie) prefix(b []byte) (s []byte, r *trie) {
 	return b, r
 }
 
+// Function of trie type
+// It looks up for a key in t variable
+// If the key doesn't exist or the interface returned by prefix function is nil, it returns nil (interface) and false (bool)
+// otherwise, it returns the inferface and true
 func (t *trie) Lookup(key []byte) (value interface{}, ok bool) {
 	key, r := t.prefix(key)
 	if len(key) > 0 || r.value == nil {
@@ -26,6 +33,8 @@ func (t *trie) Lookup(key []byte) (value interface{}, ok bool) {
 	return r.value, true
 }
 
+// Function of trie type
+// It inserts a new interface using the key received as parameter
 func (t *trie) Insert(key []byte, value interface{}) {
 	key, r := t.prefix(key)
 	if len(key) == 0 { // Key exists
@@ -39,8 +48,10 @@ func (t *trie) Insert(key []byte, value interface{}) {
 	}
 }
 
-func (t *trie) Delete(key []byte) {
-	// Search, record deepest node w/ multiple children, siblings
+// Function of trie type
+// It deletes an interface by setting it to nil according to the key received as parameter 
+// Search, record deepest node w/ multiple children, siblings
+func (t *trie) Delete(key []byte) {	
 	l, r, v := (**trie)(nil), (*trie)(nil), (*trie)(nil)
 	for t = t.down; len(key) > 0 && t != nil; {
 		if t.index == key[0] {
