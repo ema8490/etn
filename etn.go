@@ -59,35 +59,36 @@ func init() {
 	}
 }
 
-// Map the concrete type of the value contained in the empty interface 
-// to the hash contained in the byte slice.
+/* Map the concrete type of the value contained in the empty interface 
+to the hash contained in the byte slice. */
 func Register(i interface{}, h types.Hash) bool {
 	return tt.Register(reflect.TypeOf(i), h)
 }
 
-// NewEncoder returns an Encoder that writes to the io.Writer.
+/* NewEncoder returns an Encoder that writes to the io.Writer w */
 func NewEncoder(w io.Writer) *Encoder {
 	return &Encoder{w:w, buf:make([]byte, bufsize)}
 }
 
-// NewDecoder returns an Decoder that reads from the io.Reader.
+/* NewDecoder returns an Decoder that reads from the io.Reader r */
 func NewDecoder(r io.Reader) *Decoder {
 	return &Decoder{r:r, buf:make([]byte, bufsize)}
 }
 
-// Encode sends the data item contained in the empty interface value.
+/* Encode sends the data item contained in the empty interface value. */
 func (e *Encoder) Encode(i interface{}) os.Error {
 	//return e.EncodeValue(reflect.Indirect(reflect.ValueOf(i)))
 	return e.EncodeValue(reflect.ValueOf(i))
 }
 
-// Decode reads a value with the concrete type of the value contained in the
-// empty interface and stores it into said value. The value contained in the
-// empty interface must be a pointer to a value of the desired type.
+/* Decode reads a value with the concrete type of the value contained in the
+ empty interface and stores it into said value. The value contained in the
+ empty interface must be a pointer to a value of the desired type. */
 func (d *Decoder) Decode(i interface{}) os.Error {
 	return d.DecodeValue(reflect.Indirect(reflect.ValueOf(i)))
 }
 
+/* Writes encoded data into buffer b */
 func (e *Encoder) write(b []byte) {
 	if len(b) == 0 { return }
 	if _, err := e.w.Write(b); err != nil {
@@ -95,6 +96,7 @@ func (e *Encoder) write(b []byte) {
 	}
 }
 
+/* Reads encoded data from buffer b */
 func (d *Decoder) read(b []byte) {
 	if len(b) == 0 { return }
 	if _, err := d.r.Read(b); err != nil {
@@ -102,49 +104,59 @@ func (d *Decoder) read(b []byte) {
 	}
 }
 
+/* Encodes a uint8 in little endian and writes it into the Encoder buffer b */
 func (e *Encoder) uint8(u uint8) {
 	e.write([]byte{u})
 }
 
+/* Decodes a uint8 and reads it from the Decoder buffer b */
 func (d *Decoder) uint8() (v uint8) {
 	d.read(d.buf[:1])
 	return uint8(d.buf[0])
 }
 
+/* Encodes a uint16 in little endian and writes it into the Encoder buffer b */
 func (e *Encoder) uint16(u uint16) {
 	e.write([]byte{byte(u), byte(u >> 8)})
 }
 
+/* Decodes a uint16 and reads it from the Decoder buffer b */
 func (d *Decoder) uint16() (v uint16) {
 	d.read(d.buf[:2])
 	return uint16(d.buf[0]) | uint16(d.buf[1]) << 8
 }
 
+/* Encodes a uint32 in little endian and writes it into the Encoder buffer b */
 func (e *Encoder) uint32(u uint32) {
 	e.write([]byte{byte(u), byte(u >> 8), byte(u >> 16), byte(u >> 24)})
 }
 
+/* Decodes a uint32 and reads it from the Decoder buffer b */
 func (d *Decoder) uint32() (v uint32) {
 	d.read(d.buf[:4])
 	return uint32(d.buf[0]) | uint32(d.buf[1]) << 8 | uint32(d.buf[2]) << 16 | uint32(d.buf[3]) << 24
 }
 
+/* Encodes a uint64 in little endian and writes it into the Encoder buffer b */
 func (e *Encoder) uint64(u uint64) {
 	e.write([]byte{byte(u), byte(u >> 8), byte(u >> 16), byte(u >> 24),
 		byte(u >> 32), byte(u >> 40), byte(u >> 48), byte(u >> 56)})
 }
 
+/* Decodes a uint64 and reads it from the Decoder buffer b */
 func (d *Decoder) uint64() (v uint64) {
 	d.read(d.buf[:8])
 	return uint64(d.buf[0]) | uint64(d.buf[1]) << 8 | uint64(d.buf[2]) << 16 | uint64(d.buf[3]) << 24 |
 		uint64(d.buf[4]) << 32 | uint64(d.buf[5]) << 40 | uint64(d.buf[6]) << 48 | uint64(d.buf[7]) << 56
 }
 
+/* Encodes a string in byte writing it into the Encoder buffer b */
 func (e *Encoder) string(v string) {
 	e.length(uint32(len(v)))
 	e.write([]byte(v))
 }
 
+/* Decodes a string reading it from the Decoder buffer b */
 func (d *Decoder) string() (v string) {
 	b := d.buf[:d.length()]
 	d.read(b)
@@ -161,7 +173,7 @@ func (d *Decoder) length() (uint32) {
 	return d.uint32()
 }
 
-// Analogous to Encode(), but takes a reflect.Value.
+/* Called by Encode(), takes a reflect.Value. */
 func (e *Encoder) EncodeValue(v reflect.Value) (err os.Error) {
 	defer func() {
 		if x := recover(); x != nil {
@@ -180,6 +192,7 @@ func (e *Encoder) EncodeValue(v reflect.Value) (err os.Error) {
 	return
 }
 
+/* Checks the value of the passed data v and encodes it into buffer b */
 func (e *Encoder) encode(v reflect.Value) {
 	if v.CanAddr() { // Need to figure out exactly what can and can't be addressed
 		if _, ok := e.addrToIndex[v.Addr().Pointer()]; !ok {
@@ -286,7 +299,7 @@ func (e *Encoder) encode(v reflect.Value) {
 	}
 }
 
-// Analogous to Decode(), but takes a reflect.Value.
+/* Called by Decode(), takes a reflect.Value. */
 func (d *Decoder) DecodeValue(v reflect.Value) (e os.Error) {
 	defer func() {
 		if x := recover(); x != nil {
@@ -305,6 +318,7 @@ func (d *Decoder) DecodeValue(v reflect.Value) (e os.Error) {
 	return
 }
 
+/* Checks the value of the passed data v and encodes it into buffer b */
 func (d *Decoder) decode(v reflect.Value) {
 	d.indexToValue = append(d.indexToValue, v)
 
