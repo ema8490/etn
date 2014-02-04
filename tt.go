@@ -6,17 +6,19 @@ import (
 	"sync"
 )
 
+/* typetable contains information for mapping the concrete type of the value to the hash */
 type typetable struct {
 	hashToType *trie
 	typeToHash map[reflect.Type]types.Hash
 	sync.Mutex
 }
 
-// Singleton?
+/* creates a new typetable */
 func newTypeTable() *typetable {
 	return &typetable{hashToType:new(trie), typeToHash:make(map[reflect.Type]types.Hash)}
 }
 
+/* Map the concrete type of the value contained in the empty interface to the hash contained in the byte slice. */
 func (tt *typetable) Register(t reflect.Type, h types.Hash) (ok bool) {
 	if _, ok := tt.typeToHash[t]; ok {
 		return false
@@ -29,6 +31,7 @@ func (tt *typetable) Register(t reflect.Type, h types.Hash) (ok bool) {
 	return true
 }
 
+/* Given an hash returns the corresponding type */
 func (tt *typetable) TypeForHash(h types.Hash) reflect.Type {
 	tt.Lock()
 	t, ok := tt.hashToType.Lookup([]byte(h))
@@ -39,6 +42,7 @@ func (tt *typetable) TypeForHash(h types.Hash) reflect.Type {
 	return t.(reflect.Type)
 }
 
+/* Given a type returns the corresponding hash value */
 func (tt *typetable) HashForType(t reflect.Type) (h types.Hash) {
 	tt.Lock()
 	h, _ = tt.typeToHash[t]
