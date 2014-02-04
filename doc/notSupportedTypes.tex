@@ -1,0 +1,19 @@
+\section{Not Supported Types}
+
+List of not supported types (by ETN). Smart Pointers, Complex 64 bits and Complex 128 bits are currently not implemented. Unsigned Integers, Signed Integers and Unsigned Integer Pointers are architecture dependent, then are not supported.
+
+\begin{itemize}
+
+	\item Smart Pointer: a reference to a value which may or may not be in memory.
+	
+	\item Complex 64 bits: represents complex values using "float32" Go type for Re and Im parts. Represented in Go by complex64 type.
+	
+	\item Complex 128 bits: represents complex values using "float64" Go type for Re and Im parts. Represented in Go by complex128 type.
+	
+	\item Unsigned Integer: positive integer numbers or zero. Represented in Go by uint. Architecture dependent.
+	
+	\item Signed Integer: positive or negative integer numbers, zero included. Represented in Go by int. Architecture dependent.
+	
+	\item Unsigned Integer Pointer: integer type that is large enough to hold the bit pattern of any pointer. Represented in Go by uintptr. Architecture dependent.
+
+\end{itemize}
