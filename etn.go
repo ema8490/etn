@@ -22,7 +22,7 @@ func (e Error) String() string {
 
 /* Keeps trace of the type and number of addressable elements (of slices, arrays, structs and referenced pointers) */
 type vmap struct {
-	index int // Number of addressable elements so far
+	index int // Number of current addressable elements
 	t reflect.Type // Type of the current addressable element
 }
 
@@ -42,12 +42,13 @@ type Decoder struct {
 	buf []byte // Stores encoded elements
 }
 
-
+/* USELESS? */
 type Value struct {
 	Data interface{}
 	*types.Type
 }
 
+/* USELESS? */
 type Field struct {
 	Name string
 	*Value
