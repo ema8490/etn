@@ -4,7 +4,7 @@ The data structures defined here are: \emph{id}, \emph{header}, \emph{Call}, \em
 Type Server contains a \emph{reflect.Value} used during the creation of the Server, an array of \emph{int} which contains the indexes of the exported methods the Server is supposed to respond to, an \emph{Encoder} and a \emph{Decoder}, used to transmit and receive values.\\
 Type Client contains a map where the element type is \emph{*Call} and the key type is \emph{int} to keep track of the calls, an \emph{Encoder} and a \emph{Decoder}.
 Type Call contains two interfaces (one for the arguments and the other for the reply), an \emph{os.Error} and a boolean \emph{Channel}.\\
-Here the constructors of Server and Client:
+Here the constructors of \emph{Server} and \emph{Client}:
 
 \begin{itemize}
  
