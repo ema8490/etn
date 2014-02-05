@@ -33,7 +33,7 @@ type callId struct {
 var cid callId
 
 // Function of callId type
-// The function locks variable c, increments its id, returns the previous id and eventually unlock c 
+// The function locks variable c, increments its id, unlocks c and returns the c previous id
 func (c *callId) Increment() (i id) {
 	c.Lock()
 	i = c.id
@@ -44,7 +44,7 @@ func (c *callId) Increment() (i id) {
 
 // Type Server contains a reflect.Value, an array of int, an Encoder and a Decoder
 // v is the reflect.Value of an empty interface used during the creation of the Server
-// s contains the indexes of the exported methods the Server is supposed to respond to
+// methods contains the indexes of the exported methods the Server is supposed to respond to
 // Encoder and Decoder are used to transmit and receive values
 type Server struct {
 	v reflect.Value
@@ -108,7 +108,7 @@ func (c *Client) Dispatch() bool {
 
 // Function of Client type
 // it creates a new call using the parameters
-// if either call.reply or c.d (Client's decoder) is nil, the call is done
+// if either call.reply or c.d (Client's decoder) are nil, the call is done
 // otherwise, the call is added to the Client's calls map
 func (c *Client) Go(id uint64, args, reply interface{}) (call *Call) {
 	// Lock client?
@@ -132,7 +132,7 @@ func (c *Client) Go(id uint64, args, reply interface{}) (call *Call) {
 }
 
 // Function of Client type
-// Synchronous: does not return until call is finished.
+// Synchronous: It uses method Go to create a new call and does not return until call is finished. 
 func (c *Client) Call(id uint64, args, reply interface{}) (err os.Error) {
 	// XXX: Suspend, call dispatcher
 	call := c.Go(id, args, reply)
