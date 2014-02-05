@@ -8,6 +8,7 @@ import (
 	"reflect"
 )
 
+/* constants for pointer encoding */
 const (
 	bufsize = 512
 	pNIL = 0
@@ -80,7 +81,7 @@ func NewDecoder(r io.Reader) *Decoder {
 
 /* Encode sends the data item contained in the empty interface value. */
 func (e *Encoder) Encode(i interface{}) os.Error {
-	//return e.EncodeValue(reflect.Indirect(reflect.ValueOf(i)))
+	//return e.EncodeValue(reflect.Indirect(reflect.ValueOf(i))) // 03/02/2014 it works the same as return e.EncodeValue(reflect.ValueOf(i))
 	return e.EncodeValue(reflect.ValueOf(i))
 }
 
@@ -197,7 +198,7 @@ func (e *Encoder) EncodeValue(v reflect.Value) (err os.Error) {
 
 /* Checks the value of the passed data v and encodes it into buffer b */
 func (e *Encoder) encode(v reflect.Value) {
-	if v.CanAddr() { // Need to figure out exactly what can and can't be addressed
+	if v.CanAddr() { // Need to figure out exactly what can and can't be addressed // 03/02/2014 A value is addressable if it is an element of a slice, an element of an addressable array, a field of an addressable struct, or the result of dereferencing a pointer
 		if _, ok := e.addrToIndex[v.Addr().Pointer()]; !ok {
 			e.addrToIndex[v.Addr().Pointer()] = vmap{index:e.index, t:v.Type()}
 		}
