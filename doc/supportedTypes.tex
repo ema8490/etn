@@ -12,7 +12,7 @@ Here follows a list of ETN currently supported types and how they are encoded.
 	
 	\item String: represents the set of Unicode strings. Encoded using UTF-8. The length in bytes "l" of the UTF-8 encoded string is sent first as a uint32, followed by the l bytes themselves. Represented in Go by type "string".
 	
-	\item Tuple: an ordered list of elements of a given type. The length in elements l of a tuple value is sent as a uint32, followed by l encoded values of the tuple's element type. Represented in Go by array and slice types.
+	\item Tuple: an ordered list of elements of a given type. The length in elements l of a tuple value is sent as a uint32, followed by l encoded values of the tuple's element type. Represented in Go by "array" and "slice" types.
 	
 	\item Dictionary: a map of keys to values. A map is an unordered group of elements of one type, called the element type, indexed by a set of unique keys of another type, called the key type. The number of map elements is its length l, which is encoded first as a uint32 followed by l pairs (key, value) encoded data.
 	
@@ -21,12 +21,10 @@ Here follows a list of ETN currently supported types and how they are encoded.
 	If a pointer value has been encoded before as part of the same, larger value, PIDX is encoded within a byte, followed by the index of the
 previously encoded value.
 Otherwise, PVAL is encoded within a byte, followed by the encoded value that the pointer references.
-Represented in Go by pointer types.
+Represented in Go by "pointer" types.
 
-	\item Struct: a composite type containing named fields with specified types. Names are ignored when sending or receiving structs; a struct is sent by encoding each field in the order specified by the type of the structure. Represented in Go by struct types. In order to encode or decode a struct, all fields must be exported.
+	\item Struct: a composite type containing named fields with specified types. Names are ignored when sending or receiving structs. A struct is sent by encoding each field in the order specified by the type of the structure. Represented in Go by struct types. In order to encode or decode a struct, all fields must be exported.
 	
-	\item Any: a reference to a value of any type. Sent by encoding the hash for the type of the concrete value references as a Tuple, followed by the encoded value that the any references. Represented in Go by interface types. In order to encode or decode a value contained in an interface, the hash for the value's type must have been registered.
+	\item Any: a reference to a value of any type. Sent by encoding the hash for the type of the concrete value references as a Tuple, followed by the encoded value that the any references. Represented in Go by "empty interface" types. In order to encode or decode a value contained in an interface, the hash for the value's type must have been registered.
 
 \end{itemize}
-
-
