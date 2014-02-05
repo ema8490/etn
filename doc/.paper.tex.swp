@@ -1,0 +1,17 @@
+\documentclass{article}
+\usepackage{graphicx}
+
+\title{ETN}
+\author{Enrico Deiana, Emanuele Del Sozzo}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\input{introduction}
+\input{supportedTypes}
+\input{notSupportedTypes}
+\input{ETNPackage}
+
+\end{document}

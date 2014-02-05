@@ -56,6 +56,7 @@ type Field struct {
 
 var tt = newTypeTable()
 
+/* USELESS?? */
 func init() {
 	for _, v := range builtins {
 		Register(v.typ, v.hash)

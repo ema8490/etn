@@ -18,7 +18,7 @@ func newTypeTable() *typetable {
 	return &typetable{hashToType:new(trie), typeToHash:make(map[reflect.Type]types.Hash)}
 }
 
-/* Map the concrete type of the value contained in the empty interface to the hash contained in the byte slice. */
+/* Maps the concrete type of the value contained in the empty interface to the hash contained in the byte slice, and inserts it into the *trie and map[reflect.Type]types.Hash data structures. */
 func (tt *typetable) Register(t reflect.Type, h types.Hash) (ok bool) {
 	if _, ok := tt.typeToHash[t]; ok {
 		return false

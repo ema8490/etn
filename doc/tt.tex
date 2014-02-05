@@ -6,14 +6,22 @@ The constructor for typetable is:
 
 \begin{itemize}
 
-	\item \emph{func newTypeTable() *typetable}: return a new typetable structure with an empty *trie and map[reflect.Type]types.Hash.
+	\item \emph{func newTypeTable() *typetable}\\
+	Returns a new typetable structure with an empty *trie and map[reflect.Type]types.Hash.
 	
 \end{itemize}
 
 Exported methods of typetable:
 
 \begin{itemize}
-	\item \emph{func (*typetable) Register(reflect.Type, types.Hash) bool}: maps the concrete type of the value contained in the empty interface to its hash and stores it into the *trie and map[reflect.Type]types.Hash data structures.
-	\item func (*typetable) TypeForHash(types.Hash) reflect.Type: given an hash returns the corresponding type.
-	\item (*typetable) HashForType(reflect.Type) types.Hash: given a type returns the corresponding hash value.
+
+	\item \emph{func (*typetable) Register(reflect.Type, types.Hash) bool}\\
+	Maps the concrete type of the value contained in the empty interface to its hash and stores it into the *trie and map[reflect.Type]types.Hash data structures.
+	
+	\item func (*typetable) TypeForHash(types.Hash) reflect.Type\\
+	Given an hash returns the corresponding type.
+	
+	\item (*typetable) HashForType(reflect.Type) types.Hash\\
+	Given a type returns the corresponding hash value.
+	
 \end{itemize}
