@@ -1,0 +1,12 @@
+\subsection{etn.go}
+
+The main structures 
+
+\begin{itemize}
+
+	\item func NewEncoder(io.Writer): given 
+
+\end{itemize}
+
+
+

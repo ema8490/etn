@@ -20,7 +20,7 @@ func (e Error) String() string {
 	return string(e)
 }
 
-/* Keeps trace of the type and number of addressable elements (of slices, arrays, structs and referenced pointers) */
+/* Keeps track of the type and number of addressable elements (of slices, arrays, structs and referenced pointers) */
 type vmap struct {
 	index int // Number of current addressable elements
 	t reflect.Type // Type of the current addressable element
@@ -29,26 +29,26 @@ type vmap struct {
 /* Represents the Encoder */
 type Encoder struct {
 	w io.Writer // Writer that writes the encoded data into the buffer buf
-	addrToIndex map[uintptr]vmap // Keeps trace of the type and number of addressable elements
-	index int // Keeps trace of the number of encoded elements
+	addrToIndex map[uintptr]vmap // Keeps track of the type and number of addressable elements
+	index int // Keeps track of the number of encoded elements
 	buf []byte // Stores encoded elements
 }
 
 /* Represents the Decoder */
 type Decoder struct {
 	r io.Reader // Reader that reads the decoded data from the buffer buf
-	indexToValue []reflect.Value // Keeps trace of the decoded values
-	index int // USELESS?
+	indexToValue []reflect.Value // Keeps track of the decoded values
+	index int // USELESS??
 	buf []byte // Stores encoded elements
 }
 
-/* USELESS? */
+/* USELESS?? */
 type Value struct {
 	Data interface{}
 	*types.Type
 }
 
-/* USELESS? */
+/* USELESS?? */
 type Field struct {
 	Name string
 	*Value
@@ -322,7 +322,7 @@ func (d *Decoder) DecodeValue(v reflect.Value) (e os.Error) {
 
 /* Checks the value of the passed data v and encodes it into buffer b */
 func (d *Decoder) decode(v reflect.Value) {
-	d.indexToValue = append(d.indexToValue, v)
+	d.indexToValue = append(d.indexToValue, v) // d.index++ ??
 
 	switch v.Kind() {
 	case reflect.Bool:
