@@ -25,6 +25,6 @@ Represented in Go by "pointer" types.
 
 	\item Struct: a composite type containing named fields with specified types. Names are ignored when sending or receiving structs. A struct is sent by encoding each field in the order specified by the type of the structure. Represented in Go by struct types. In order to encode or decode a struct, all fields must be exported.
 	
-	\item Any: a reference to a value of any type. Sent by encoding the hash for the type of the concrete value references as a Tuple, followed by the encoded value that the any references. Represented in Go by "empty interface" types. In order to encode or decode a value contained in an interface, the hash for the value's type must have been registered.
+	\item Any: a reference to a value of any type. Sent by encoding the hash for the type of the concrete value references as a Tuple, followed by the encoded value that the any references. Represented in Go by "empty interface" types. In order to encode or decode a value contained in an interface, the hash for the value's type must have been registered in the typetable (se tt.go for more details).
 
 \end{itemize}
