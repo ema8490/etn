@@ -1,6 +1,7 @@
 package etn
 
-// Type trie contains a byte (used as index) and interface and two pointers to trie type
+//Type trie is used to build a tree
+//It contains a byte (used as index) and interface and two pointers to trie type (one to the child and one to the sibling)
 type trie struct {
 	index byte
 	value interface{}
@@ -10,6 +11,8 @@ type trie struct {
 // Function of trie type
 // Find the longest present prefix of b
 // it returns an array of bytes and pointer to a trie variable
+// This trie variable is the last node whose index matches the prefix 
+// or it is t if there is no matching index in t's children.
 func (t *trie) prefix(b []byte) (s []byte, r *trie) {
 	for r, t = t, t.down; len(b) > 0 && t != nil; {
 		if t.index == b[0] {
