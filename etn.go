@@ -8,7 +8,7 @@ import (
 	"reflect"
 )
 
-/* constants for pointer encoding */
+/* Constants for pointer encoding */
 const (
 	bufsize = 512
 	pNIL = 0
@@ -23,24 +23,33 @@ func (e Error) String() string {
 
 /* Keeps track of the type and number of addressable elements (of slices, arrays, structs and referenced pointers) */
 type vmap struct {
-	index int // Number of current addressable elements
-	t reflect.Type // Type of the current addressable element
+	// Number of current addressable elements
+	index int 
+	// Type of the current addressable element
+	t reflect.Type 
 }
 
 /* Represents the Encoder */
 type Encoder struct {
-	w io.Writer // Writer that writes the encoded data into the buffer buf
-	addrToIndex map[uintptr]vmap // Keeps track of the type and number of addressable elements
-	index int // Keeps track of the number of encoded elements
-	buf []byte // Stores encoded elements
+	// Writer that writes the encoded data into the buffer buf
+	w io.Writer 
+	// Keeps track of the type and number of addressable elements
+	addrToIndex map[uintptr]vmap
+	// Keeps track of the number of encoded elements
+	index int 
+	// Stores encoded elements
+	buf []byte 
 }
 
 /* Represents the Decoder */
 type Decoder struct {
-	r io.Reader // Reader that reads the decoded data from the buffer buf
-	indexToValue []reflect.Value // Keeps track of the decoded values
+	// Reader that reads the decoded data from the buffer buf
+	r io.Reader 
+	// Keeps track of the decoded values
+	indexToValue []reflect.Value 
 	index int // USELESS??
-	buf []byte // Stores encoded elements
+	// Stores encoded elements
+	buf []byte 
 }
 
 /* USELESS?? */
@@ -167,12 +176,12 @@ func (d *Decoder) string() (v string) {
 	return string(b)
 }
 
-// encode/decode length using base-128. If >1 digit is encoded,
-// prefix the encoded value with its length, negated.
+/* Encode length of an array, slice, map, string */
 func (e *Encoder) length(l uint32) {
 	e.uint32(l)
 }
 
+/* Decode length of an array, slice, map, string */
 func (d *Decoder) length() (uint32) {
 	return d.uint32()
 }

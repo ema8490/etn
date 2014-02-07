@@ -6,14 +6,14 @@ import (
 	"sync"
 )
 
-/* typetable contains information for mapping the concrete type of the value to the hash */
+/* The typetable struct contains information for mapping the concrete type of the value to the hash */
 type typetable struct {
 	hashToType *trie
 	typeToHash map[reflect.Type]types.Hash
 	sync.Mutex
 }
 
-/* creates a new typetable */
+/* Creates a new typetable (constructor) */
 func newTypeTable() *typetable {
 	return &typetable{hashToType:new(trie), typeToHash:make(map[reflect.Type]types.Hash)}
 }
