@@ -1,0 +1,39 @@
+#include <stdlib.h>
+#include <string.h>
+
+#include "unitTest.h"
+#include "testGraph.h"
+
+static bool
+_predicate (void)
+{
+	Strings data;
+	// Note: you may find the hash for the Strings type using egPrint.
+	uint8_t hash[] = { 0xf2, 0xe4, 0x40, 0x10, 0x8, 0x91, 0x91, 0xd3, 0x1f, 0x92, 0x6b, 0xd8, 0x61, 0x6b, 0xa8, 0x29, 0x58, 0xf8, 0x52, 0x78, 0x6f, 0xb0, 0xe3, 0x8b, 0x37, 0xad, 0x4c, 0x79, 0x34, 0x8f, 0xc6, 0x72, 0x80, 0x60, 0xf2, 0xce, 0x61, 0x4c, 0x97, 0x7, 0x3d, 0x8b, 0x2d, 0x52, 0x70, 0x7f, 0x5a, 0x67, 0xba, 0x4, 0xa5, 0x63, 0xe5, 0xc9, 0x26, 0x64, 0x30, 0xb8, 0xca, 0x7, 0x7, 0x3c, 0x32, 0x20 };
+
+	Slice types;
+	loadTypeGraph (&types, TestTypesPath);
+
+	const char bytes1[] = "Hello, world!";
+	const char bytes2[] = "Goodbye, cruel world!";
+
+	data.field1 = stringAllocateInitialize(bytes1);
+	data.field2 = stringAllocateInitialize(bytes2);
+
+	uint8_t buf[1024];
+	EtnBufferEncoder *e = etnBufferEncoderNew(buf, sizeof(buf));
+
+	EtnLength encodedSize;
+	etnEncode((EtnEncoder *) e, EtnToValue(&StringsType, &data), &encodedSize);
+	EtnBufferVerifier *v = etnBufferVerifierNew(types, buf, encodedSize);
+	if (StatusOk != etnVerify ((EtnVerifier *) v, hash)) {
+		return false;
+	}
+
+	free (e);
+	free (v);
+
+	return true;
+}
+
+UnitTest testVerifyStrings = { __FILE__, _predicate };

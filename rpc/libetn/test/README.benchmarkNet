@@ -1,0 +1,35 @@
+*** Note: all benchmarks below were done on fast1 and fast2. ***
+
+Perform test across Ethernet:
+
+real	0m0.712s
+user	0m0.103s
+sys	0m0.161s = 16,853,932 bytes per second
+
+non-ETN control (across Ethernet):
+real	0m0.254s
+user	0m0.081s
+sys	0m0.172s = 47,244,094 bytes per second
+
+*** Note: all benchmarks below were done on Mike's MacBook over the
+loopback interface. ***
+
+Buffered writes and reads:
+real	0m1.482s
+user	0m1.231s
+sys	0m0.124s = 8,097,165 bytes per second
+
+Buffered writes:
+real	0m6.563s
+user	0m3.143s
+sys	0m2.985s = 1,828,432 bytes per second
+
+Original attempt:
+real	0m11.183s
+user	0m2.992s
+sys	0m4.074s = 1,073,057 bytes per second
+
+Non-ETN control:
+real	0m0.716s
+user	0m0.194s
+sys	0m0.250s = 16,759,776 bytes per second

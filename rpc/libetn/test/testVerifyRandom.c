@@ -1,0 +1,44 @@
+#include <stdlib.h>
+#include <time.h>
+
+#include "unitTest.h"
+
+static bool
+_predicate (void)
+{
+	int i;
+	Slice types;
+	loadTypeGraph (&types, TestTypesPath);
+
+	EtnBufferVerifier *v = etnBufferVerifierNew(types, NULL, 0);
+
+	// Note: you may find the hash for the ByteArray type using egPrint.
+	uint8_t hash[] = { 0x63, 0xbe, 0x1c, 0xcb, 0xfa, 0xdf, 0x34, 0x8c, 0x83, 0xd2, 0xc5, 0xdb, 0xe4, 0xcf, 0x85, 0xf1, 0x8d, 0xc7, 0xe8, 0x2b, 0x3f, 0x15, 0x73, 0xe2, 0x91, 0x95, 0x55, 0x2e, 0x35, 0x5c, 0x78, 0x4f, 0x4a, 0x36, 0xda, 0x49, 0xa9, 0x3f, 0x7f, 0x9c, 0xdd, 0xde, 0xef, 0xb5, 0x8e, 0xcb, 0x57, 0x2, 0x6e, 0x1, 0xae, 0x58, 0x82, 0x32, 0xef, 0x9a, 0x99, 0xeb, 0x84, 0xa9, 0xa1, 0x7a, 0x4c, 0x4b };
+
+	// Let's feed this thing some random data.
+	// I suppose there is a chance that we could
+	// produce a valid encoding, but it's unlikely.
+	srand (time (NULL));
+	for (i = 0; i < 1000; i++) {
+		int n = 1024 + rand () % 1024;
+		uint8_t *randomData = malloc (n);
+		int j;
+
+		for (j = 0; j < n; j++) {
+			randomData[j] = (uint8_t) rand ();
+		}
+
+		etnBufferVerifierReset(v, randomData, n);
+		if (StatusOk == etnVerify ((EtnVerifier *) v, hash)) {
+			return false;
+		}
+
+		free (randomData);
+	}
+
+	free (v);
+
+	return true;
+}
+
+UnitTest testVerifyRandom = { __FILE__, _predicate };

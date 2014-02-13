@@ -1,0 +1,3 @@
+LoopC struct {
+	A *LoopA
+}

@@ -1,0 +1,3 @@
+LoopHead struct {
+	A *LoopA
+}
