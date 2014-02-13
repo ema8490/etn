@@ -1,0 +1,13 @@
+libNetStack is integrated with etn, so this applies to both
+
+Performance problems:
+	    1. byte buffer (packet, etn)
+	    2. byte-wide copies (memcpy)
+	    3. unaligned accesses due to etn and ethernet headers
+	    4. extra memcpys
+
+Solution
+	    1. packet and etn should code to uint32 buffers
+	    2. don't use memcpy, use uint32/uint64 hybrid
+	    3. offset ethernet headers
+	    4. audit code for extra memcpy
