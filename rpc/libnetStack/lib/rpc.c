@@ -13,7 +13,7 @@
 #include <ethos/generic/debug.h>
 
 // This is here because it is used from both Ethos and Dom0 even though
-// it is not RPC-specific.
+// it is not RPC-specific. This is simply an array of debug flags
 DebugFlagDesc debugFlagDesc[] = {
     { tunnelDebug, "debug.tunnel" },   // constant, kernel arg str
     { syscallDebug, "debug.syscall" },
@@ -32,6 +32,14 @@ DebugFlagDesc debugFlagDesc[] = {
     { 0, 0x00 }
 };
 
+
+/*******************************************/
+/*******BEGIN DEBUG PURPOSE FUNCTIONS*******/
+/*******************************************/
+
+
+// These functions are used to send a ping between both Shadowdaemon and Terminal
+
 // FIXME: Right now, libetn requires that both client and server have all RPC functions defined.
 void
 rpcShadowDaemonPing (EtnRpcHost *h, uint64_t eventId)
@@ -41,6 +49,7 @@ rpcShadowDaemonPing (EtnRpcHost *h, uint64_t eventId)
     rpcCall (rpcShadowDaemonPingReplyCall, h, rpcInterfaceShadowDaemonPacketEncoder->connection, eventId, StatusOk);
 }
 
+// Parameters h and eventId are useless in this function since they are not used
 void
 rpcShadowDaemonPingReply (EtnRpcHost *h, uint64_t eventId, Status status)
 {
@@ -55,12 +64,23 @@ rpcTerminalPing (EtnRpcHost *h, uint64_t eventId)
     rpcCall (rpcTerminalPingReplyCall, h, rpcInterfaceTerminalPacketEncoder->connection, eventId, StatusOk);
 }
 
+// Parameters h and eventId are useless in this function since they are not used
 void
 rpcTerminalPingReply (EtnRpcHost *h, uint64_t eventId, Status status)
 {
     mixinPrint("received terminal ping reply, status %d\n", status);
 }
 
+
+/*****************************************/
+/*******END DEBUG PURPOSE FUNCTIONS*******/
+/*****************************************/
+
+
+// This function initialize the interfaces. All the variables that are initialized are global variables declared in rpc.h
+// For each Ethos primary component a packet encoder is defined. Then, a null encoder and a buffer decoder are also defined.
+// These five interfaces, in addiction to the servers of each primary component, are used to define the interface host of each
+// primary component
 void
 rpcInitInterfaces(void)
 {
@@ -74,33 +94,35 @@ rpcInitInterfaces(void)
     rpcInterfaceBufferDecoder             = etnBufferDecoderNew(NULL, 0);
 
     rpcInterfaceShadowDaemonHost = etnRpcHostNew(EtnToValue(&RpcShadowDaemonServer, 0),
-                                                     (EtnEncoder *) rpcInterfaceShadowDaemonPacketEncoder,
-                                                     (EtnDecoder *) rpcInterfaceBufferDecoder);
+                                                     (EtnEncoder *) rpcInterfaceShadowDaemonPacketEncoder, //VERY BAD CAST!! MEMORY ALLOCATION DEPENDENT!!
+                                                     (EtnDecoder *) rpcInterfaceBufferDecoder); //VERY BAD CAST!! MEMORY ALLOCATION DEPENDENT!!
 
     rpcInterfaceTerminalHost     = etnRpcHostNew(EtnToValue(&RpcTerminalServer, 0),
-                                                     (EtnEncoder *) rpcInterfaceTerminalPacketEncoder,
-                                                     (EtnDecoder *) rpcInterfaceBufferDecoder);
+                                                     (EtnEncoder *) rpcInterfaceTerminalPacketEncoder, //VERY BAD CAST!! MEMORY ALLOCATION DEPENDENT!!
+                                                     (EtnDecoder *) rpcInterfaceBufferDecoder); //VERY BAD CAST!! MEMORY ALLOCATION DEPENDENT!!
 
     rpcInterfaceKernelHost       = etnRpcHostNew(EtnToValue(&RpcKernelServer, 0),
-                                                     (EtnEncoder *) rpcInterfaceKernelPacketEncoder,
-                                                     (EtnDecoder *) rpcInterfaceBufferDecoder);
+                                                     (EtnEncoder *) rpcInterfaceKernelPacketEncoder, //VERY BAD CAST!! MEMORY ALLOCATION DEPENDENT!!
+                                                     (EtnDecoder *) rpcInterfaceBufferDecoder); //VERY BAD CAST!! MEMORY ALLOCATION DEPENDENT!!
 
     rpcInterfaceNullHost         = etnRpcHostNew(EtnToValue(&RpcShadowDaemonServer, 0),
-                                                     (EtnEncoder *) rpcInterfaceNullEncoder,
-                                                     (EtnDecoder *) rpcInterfaceBufferDecoder);
+                                                     (EtnEncoder *) rpcInterfaceNullEncoder, //VERY BAD CAST!! MEMORY ALLOCATION DEPENDENT!!
+                                                     (EtnDecoder *) rpcInterfaceBufferDecoder); //VERY BAD CAST!! MEMORY ALLOCATION DEPENDENT!!
 
     debugXPrint(rpcDebug, "done\n");
 }
 
+// This function calls some functions that initialize rpc components
 void
 rpcInit(void)
 {
+    // Initialize the packet
     packetInit();
 
-    // Initialize timer cache.
+    // Initialize timer cache
     reliabilityWindowInit();
 
-    // initialize tunnel
+    // Initialize tunnel
     tunnelInit();
 
     rpcInitInterfaces();
