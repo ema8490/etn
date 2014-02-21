@@ -20,9 +20,20 @@ typedef struct PacketEncoder_s {
 	Connection      *connection;
 } PacketEncoder;
 
+// Create a new, blank packetEncoder. Must be reset before use.
+// The definition is inside packetEncoder.c
 PacketEncoder *packetEncoderNew(void);
+
+// Reset the packetEncoder.
+// The definition is inside packetEncoder.c
 void           packetEncoderReset(PacketEncoder *e, Connection *c, uint32_t totalLength);
+
+// Write data to a packet.
+// Inside packetEncoder.c there is the definition of _packetEncoderWrite (which is static) ?????
 int            packetEncoderWrite(EtnEncoder *_e, uint8_t *data, uint32_t length);
+
+// Flush packet encoder, sending the packet as the final fragment.
+// Inside packetEncoder.c there is the definition of _packetEncoderFlush (which is static) ?????
 void           packetEncoderFlush(EtnEncoder *e);
 
 #endif

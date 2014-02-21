@@ -12,10 +12,12 @@
 #include <ethos/generic/packetEncoder.h>
 #include <ethos/generic/netInterface.h>
 
+
+// Definition of global variables declared in rpc.h
 PacketEncoder    *rpcInterfaceShadowDaemonPacketEncoder;
 PacketEncoder    *rpcInterfaceTerminalPacketEncoder;
 PacketEncoder    *rpcInterfaceKernelPacketEncoder;
-PacketEncoder    *rpcInterfaceNullEncoder;
+PacketEncoder    *rpcInterfaceNullEncoder;	/********* in rpc.h this pointer type is EtnNullEncoder ????? *********/
 EtnBufferDecoder *rpcInterfaceBufferDecoder;
 EtnRpcHost       *rpcInterfaceShadowDaemonHost;
 EtnRpcHost       *rpcInterfaceTerminalHost;
@@ -29,7 +31,7 @@ static
 void
 _packetEncoderFlush (EtnEncoder *_e)
 {
-	PacketEncoder *e = (PacketEncoder *) _e;
+	PacketEncoder *e = (PacketEncoder *) _e; //VERY BAD CAST!! MEMORY ALLOCATION DEPENDENT!!
 
 	ASSERT (e);
 	ASSERT (e->packet);
@@ -84,7 +86,7 @@ _packetEncoderWrite (EtnEncoder *_e, uint8_t *data, uint32_t length)
 
 	uint32_t origLength = length;
 
-	PacketEncoder *e = (PacketEncoder *) _e;
+	PacketEncoder *e = (PacketEncoder *) _e; //VERY BAD CAST!! MEMORY ALLOCATION DEPENDENT!!
 
 	if (NULL == e->packet) { // See commentary in packetEncoderReset.
 		_packetEncoderCreateMax (e, true);
@@ -144,7 +146,7 @@ packetEncoderReset (PacketEncoder *e, Connection *c, uint32_t totalLength)
 
 	debugXPrint (tunnelDebug, "reseting ETN packet encoder\n");
 
-	etnEncoderReset ((EtnEncoder *) e, _packetEncoderWrite, _packetEncoderFlush);
+	etnEncoderReset ((EtnEncoder *) e, _packetEncoderWrite, _packetEncoderFlush); //VERY BAD CAST!! MEMORY ALLOCATION DEPENDENT!!
 
 	// NOTE: packets are freed in tunnelIsNewPacket() on remote acknowlegement.
 	//       Free here if never sent.

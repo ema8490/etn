@@ -11,6 +11,7 @@
 // Using extern keyword, C variables are declared but not defined. So, they must be defined in another header or c file before using them.
 // Moreover, the extern extends the visibility to the whole program.
 // By externing a variable we can use the variables anywhere in the program provided we know the declaration of them and the variable is defined somewhere.
+// These global variables are used as hosts, encoders and decoders of Ethos primary components
 extern PacketEncoder    *rpcInterfaceShadowDaemonPacketEncoder;
 extern PacketEncoder    *rpcInterfaceTerminalPacketEncoder;
 extern PacketEncoder    *rpcInterfaceKernelPacketEncoder;
@@ -42,5 +43,6 @@ extern EtnRpcHost       *rpcInterfaceNullHost;
 #endif
 
 
-// Defined in rpc.c
+// This function calls some functions that initialize rpc components.
+// The definition is inside rpc.c
 void rpcInit(void);

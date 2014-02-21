@@ -33,9 +33,9 @@ DebugFlagDesc debugFlagDesc[] = {
 };
 
 
-/*******************************************/
-/*******BEGIN DEBUG PURPOSE FUNCTIONS*******/
-/*******************************************/
+/*********************************************/
+/******* BEGIN DEBUG PURPOSE FUNCTIONS *******/
+/*********************************************/
 
 
 // These functions are used to send a ping between both Shadowdaemon and Terminal
@@ -72,9 +72,9 @@ rpcTerminalPingReply (EtnRpcHost *h, uint64_t eventId, Status status)
 }
 
 
-/*****************************************/
-/*******END DEBUG PURPOSE FUNCTIONS*******/
-/*****************************************/
+/*******************************************/
+/******* END DEBUG PURPOSE FUNCTIONS *******/
+/*******************************************/
 
 
 // This function initialize the interfaces. All the variables that are initialized are global variables declared in rpc.h
@@ -112,7 +112,7 @@ rpcInitInterfaces(void)
     debugXPrint(rpcDebug, "done\n");
 }
 
-// This function calls some functions that initialize rpc components
+// This function calls some functions that initialize rpc components.
 void
 rpcInit(void)
 {
