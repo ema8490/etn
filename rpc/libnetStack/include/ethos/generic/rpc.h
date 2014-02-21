@@ -7,6 +7,10 @@
 #include <ethos/dual/ethosTypes.h>
 #include <ethos/dual/ref.h>
 
+
+// Using extern keyword, C variables are declared but not defined. So, they must be defined in another header or c file before using them.
+// Moreover, the extern extends the visibility to the whole program.
+// By externing a variable we can use the variables anywhere in the program provided we know the declaration of them and the variable is defined somewhere.
 extern PacketEncoder    *rpcInterfaceShadowDaemonPacketEncoder;
 extern PacketEncoder    *rpcInterfaceTerminalPacketEncoder;
 extern PacketEncoder    *rpcInterfaceKernelPacketEncoder;
@@ -37,4 +41,6 @@ extern EtnRpcHost       *rpcInterfaceNullHost;
 
 #endif
 
+
+// Defined in rpc.c
 void rpcInit(void);
