@@ -15,15 +15,17 @@
 #include <ethos/generic/netCrypto.h>
 #include <ethos/generic/packetEncoder.h>
 
+/* Creates a new connection allocating the needed memory for the connection structure */
 Connection *
 connectionAlloc(void)
 {
-    Connection *connection = (Connection *) malloc(sizeof(Connection));
-    memzero((void *)connection, sizeof(Connection));
+    Connection *connection = (Connection *) malloc(sizeof(Connection)); // Allocates the needed memory
+    memzero((void *)connection, sizeof(Connection)); // Initializes the connection structure to zero
 
     return connection;
 }
 
+/* Free the allocated memory for the connection structure */
 void
 connectionFree(Connection *connection)
 {
@@ -34,19 +36,21 @@ connectionFree(Connection *connection)
 //______________________________________________________________________________
 // connection IDs specify the side of the connection, check that it matches
 //______________________________________________________________________________
+/* Given a tunnel and an outgoing connection number, checks whether they match (connectionId and tunel oddSide are both even or odd)*/
 int
 mySideConnectionId(Tunnel *tunnel, uint32 connectionId)
 {
     ASSERT(tunnel);
 
-    int connectionParity = connectionId & 1;
-    return tunnel->envelopeRemote.oddSide == connectionParity;
+    int connectionParity = connectionId & 1; // connectionParity states whether connectionId is even or odd
+    return tunnel->envelopeRemote.oddSide == connectionParity; // return 1 if connectionId and tunel oddSide are both even or odd, 0 otherwise
 }
 
 //_____________________________________________________________________________
 /// Collected all the network packets of the connection into a memory packet,
 /// now process it
 //_____________________________________________________________________________
+/* Once all the fragments (network packets) have been received, they are joined into a memory packets and handled by rpcInterfaceTerminalHost, rpcInterfaceShadowDaemonHost, rpcInterfaceKernelHost respectively if the connection tunnel is associated to RpcTerminalServer, RpcShadowDaemonServer, RpcKernelServer */
 void
 connectionProcessPacket(Connection *connection,
 			Packet     *packet
@@ -64,25 +68,25 @@ connectionProcessPacket(Connection *connection,
     // FIXME: zero argument to packetEncoderReset should be okay because etnRpcHandle should only directly
     //        decode, not encode. We will reset again before a *ReplyCall with the correct
     //        length, but we need to reset here to get the connection.
-    if (connection->tunnel->rpcInterface == &RpcTerminalServer)
+    if (connection->tunnel->rpcInterface == &RpcTerminalServer) // tunnel associated with ETN RpcTerminalServer
 	{
 	    packetEncoderReset (rpcInterfaceTerminalPacketEncoder, connection, 0);
 	    debugXPrint(rpcDebug, "call etnRpcHandle [rpcInterfaceTerminalHost]\n");
 	    etnRpcHandle (rpcInterfaceTerminalHost);
 	}
-    else if (connection->tunnel->rpcInterface == &RpcShadowDaemonServer)
+    else if (connection->tunnel->rpcInterface == &RpcShadowDaemonServer) // tunnel associated with ETN RpcShadowDaemonServer
 	{
 	    packetEncoderReset (rpcInterfaceShadowDaemonPacketEncoder, connection, 0);
 	    debugXPrint(rpcDebug, "call etnRpcHandle [rpcInterfaceShadowDaemonHost]\n");
 	    etnRpcHandle (rpcInterfaceShadowDaemonHost);
 	}
-    else if (connection->tunnel->rpcInterface == &RpcKernelServer)
+    else if (connection->tunnel->rpcInterface == &RpcKernelServer) // tunnel associated with ETN RpcKernelServer
 	{
 	    packetEncoderReset (rpcInterfaceKernelPacketEncoder, connection, 0);
 	    debugXPrint(rpcDebug, "call etnRpcHandle [rpcInterfaceKernelHost]\n");
 	    etnRpcHandle (rpcInterfaceKernelHost);
 	}
-    else
+    else // tunnel not associated with any ETN Rpc
 	{
 	    debugXPrint(rpcDebug, "Unknown ETN RPC associated with tunnel\n");
 	    BUG ();
@@ -92,24 +96,25 @@ connectionProcessPacket(Connection *connection,
 //______________________________________________________________________________
 /// accept a new connection request
 //______________________________________________________________________________
+/* Given an incoming connection, accepts it sending a packet with AcceptConnection code as operation and the connectionId */
 void
 acceptConnection(Connection *connection)
 {
     ASSERT(connection);
 
-    Tunnel    *tunnel = connection->tunnel;
+    Tunnel    *tunnel = connection->tunnel; // takes the connection tunnel
     ASSERT(tunnel);
 
-    Packet *packet = tunnelPacketCreate(tunnel, 0);
+    Packet *packet = tunnelPacketCreate(tunnel, 0); // creates an empty packet
 
-    uint32 operation = AcceptConnection << connectionOperationShift;
-    putUint32(operation,    packet);
-    putUint32(connection->connectionId, packet);
+    uint32 operation = AcceptConnection << connectionOperationShift; // generates the AcceptConnection operation code
+    putUint32(operation,    packet); // puts the operation code inside the packet
+    putUint32(connection->connectionId, packet); // puts the connectionId inside the packet
 
     // the other side allocated
     ASSERT(!mySideConnectionId(tunnel, connection->connectionId));
 
-    tunnelOut(packet);
+    tunnelOut(packet); // sends the packet
 }
 
 
