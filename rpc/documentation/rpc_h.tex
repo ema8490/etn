@@ -1,1 +1,34 @@
 \section{rpc.h}
+
+The global variables declared here are:
+\begin{itemize}
+\item extern PacketEncoder *rpcInterfaceShadowDaemonPacketEncoder
+\item extern PacketEncoder *rpcInterfaceTerminalPacketEncoder
+\item extern PacketEncoder *rpcInterfaceKernelPacketEncoder
+\item extern EtnNullEncoder *rpcInterfaceNullEncoder
+\item extern EtnBufferDecoder *rpcInterfaceBufferDecoder
+\item extern EtnRpcHost *rpcInterfaceShadowDaemonHost
+\item extern EtnRpcHost *rpcInterfaceTerminalHost
+\item extern EtnRpcHost *rpcInterfaceKernelHost
+\item extern EtnRpcHost *rpcInterfaceNullHost
+\end{itemize}
+
+Using extern keyword, C variables are declared but not defined. So, they must be defined in another header or c file before using them. In particular, these variables are defined in \emph{packetEncoder.c}
+Moreover, the extern extends the visibility to the whole program. These global variables are used as hosts, encoders and decoders of Ethos primary components.\\\\
+The functions exported by the header file are:
+
+\begin{itemize}
+\item \emph{void rpcInit(void)}\\
+This function calls some other functions that initialize rpc components. The definition is inside \emph{rpc.c}.
+
+\item \emph{rpcCall(fn, host, connection, eventId, ...)}\\
+This macro is used to: 
+\begin{enumerate}
+
+\item calculate length of encoded packet with a dummy run
+\item reset the packet encoder with this length
+\item perform the actual RPC call
+
+\end{enumerate}
+
+\end{itemize}

@@ -43,6 +43,6 @@ extern EtnRpcHost       *rpcInterfaceNullHost;
 #endif
 
 
-// This function calls some functions that initialize rpc components.
+// This function calls some other functions that initialize rpc components.
 // The definition is inside rpc.c
 void rpcInit(void);

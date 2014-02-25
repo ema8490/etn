@@ -77,7 +77,7 @@ rpcTerminalPingReply (EtnRpcHost *h, uint64_t eventId, Status status)
 /*******************************************/
 
 
-// This function initialize the interfaces. All the variables that are initialized are global variables declared in rpc.h
+// This function initialize the interfaces. All the variables that are initialized are global variables declared in rpc.h and defined in packetEncoder.c
 // For each Ethos primary component a packet encoder is defined. Then, a null encoder and a buffer decoder are also defined.
 // These five interfaces, in addiction to the servers of each primary component, are used to define the interface host of each
 // primary component
