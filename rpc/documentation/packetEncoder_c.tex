@@ -1,19 +1,20 @@
 \section{packetEncoder.c}
-The global variables declared in \emph{rpc.h} are defined here, although \emph{rpcInterfaceNullEncoder} variable here has type \emph{PacketEncoder}, while in file \emph{rpc.h} it has type \emph{EtnNullEncoder}.\\\\
+The global variables declared in \emph{rpc.h} are defined here.\\
 The functions defined here are:
 \begin{itemize}
 
 \item \emph{static void \_packetEncoderFlush (EtnEncoder *\_e)}\\
-This function flushes packet encoder, sending the packet as the final fragment.\\
-This function contains a very bad cast since it is memory allocation dependent.
+This function flushes packet encoder, sending the packet as the final fragment.
+
 \item \emph{static void \_packetEncoderCreateMax (PacketEncoder *e, bool firstPacket)}\\
 This function creates a packet of the maximum size allowed by the corresponding tunnel. It will increment sequence counter; if a packet is created here it must be sent.
+
 \item \emph{static int \_packetEncoderWrite (EtnEncoder *\_e, uint8\_t *data, uint32\_t length)}\\
-This function writes data to a packet, sending fragments as maximum size reached. The final (non-full) fragment is not sent because there may be remaining data to write to it. This fragment is sent when the flush function is called. Note that if the write does not fill the first fragment, then nothing will be sent until flush is called.\\
-This function contains a very bad cast since it is memory allocation dependent.
+This function writes data to a packet, sending fragments as maximum size reached. The final (non-full) fragment is not sent because there may be remaining data to write to it. This fragment is sent when the flush function is called. Note that if the write does not fill the first fragment, then nothing will be sent until flush is called.
+
 \item \emph{void packetEncoderReset (PacketEncoder *e, Connection *c, uint32\_t totalLength)}\\
-This function resets the packetEncoder. The declaration is inside \emph{packetEncoder.h}.\\
-This function contains a very bad cast since it is memory allocation dependent.
+This function resets the packetEncoder. The declaration is inside \emph{packetEncoder.h}.
+
 \item \emph{PacketEncoder *packetEncoderNew()}\\
 This function creates a new, blank packetEncoder. Must be reset before use. The declaration is inside \emph{packetEncoder.h}.
 

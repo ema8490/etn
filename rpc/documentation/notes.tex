@@ -1,0 +1,59 @@
+\section{notes}
+Here the list of problems that were found in the previous files:
+\begin{itemize}
+
+\item \textbf{rpc.c}
+\begin{itemize}
+\item \emph{void rpcShadowDaemonPingReply (EtnRpcHost *h, uint64\_t eventId, Status status)}\\
+Parameters \emph{h} and \emph{eventId} are useless in this function since they are not used.
+
+\item \emph{void rpcTerminalPingReply (EtnRpcHost *h, uint64\_t eventId, Status status)}\\
+Parameters \emph{h} and \emph{eventId} are useless in this function since they are not used.
+
+\item \emph{void rpcInitInterfaces(void)}\\
+This function contains very bad casts since they are memory allocation dependent.
+\end{itemize}
+
+\item \textbf{packetEncoder.h}
+\begin{itemize}
+\item\emph{int packetEncoderWrite(EtnEncoder *\_e, uint8\_t *data, uint32\_t length)}\\
+Inside \emph{packetEncoder.c} there is the definition of \emph{\_packetEncoderWrite} which is \emph{static}. By definition of \emph{static} keyword, a function declared \emph{static} cannot be seen outside the file it was defined in. So, if they were meant to be the same function, it is not clear why it is also defined in header file.
+
+\item\emph{void packetEncoderFlush(EtnEncoder *e)}\\
+Inside \emph{packetEncoder.c} there is the definition of \emph{\_packetEncoderFlush} which is static. By definition of \emph{static} keyword, a function declared \emph{static} cannot be seen outside the file it was defined in. So, if they were meant to be the same function, it is not clear why it is also defined in header file.
+\end{itemize}
+
+\item \textbf{packetEncoder.c}
+\begin{itemize}
+\item The global variables declared in \emph{rpc.h} are defined in this file, although \emph{rpcInterfaceNullEncoder} variable here has type \emph{PacketEncoder}, while in file \emph{rpc.h} it has type \emph{EtnNullEncoder}.
+
+\item \emph{static void \_packetEncoderFlush (EtnEncoder *\_e)}\\
+This function contains a very bad cast since it is memory allocation dependent.
+
+\item \emph{static int \_packetEncoderWrite (EtnEncoder *\_e, uint8\_t *data, uint32\_t length)}\\
+This function contains a very bad cast since it is memory allocation dependent.
+\item \emph{void packetEncoderReset (PacketEncoder *e, Connection *c, uint32\_t totalLength)}\\
+This function contains a very bad cast since it is memory allocation dependent.
+\end{itemize}
+
+\item \textbf{connection.h}
+\begin{itemize}
+\item connection.h problems
+\end{itemize}
+
+\item \textbf{connection.c}
+\begin{itemize}
+\item conection.c problems
+\end{itemize}
+
+\item \textbf{erpc.c}
+\begin{itemize}
+\item erpc.c problems
+\end{itemize}
+
+\item \textbf{etn.h}
+\begin{itemize}
+\item etn.h problems
+\end{itemize}
+
+\end{itemize}
