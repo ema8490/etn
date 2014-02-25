@@ -1,1 +1,27 @@
 \section{packetEncoder.h}
+The data structure defined here is \emph{packetEncoder}. It contains:
+
+\begin{itemize}
+\item EtnBufferEncoder encoder
+\item Packet  *packet
+\item uint32\_t totalLength
+\item bool packetSent
+\item Connection *connection
+\end{itemize}
+The functions declared here are:
+
+\begin{itemize}
+
+\item\emph{PacketEncoder *packetEncoderNew(void)}\\
+This function creates a new, blank packetEncoder. Must be reset before use. The definition is inside \emph{packetEncoder.c}.
+
+\item\emph{void packetEncoderReset(PacketEncoder *e, Connection *c, uint32\_t totalLength)}\\
+This function resets the packetEncoder. The definition is inside \emph{packetEncoder.c}.
+
+\item\emph{int packetEncoderWrite(EtnEncoder *\_e, uint8\_t *data, uint32\_t length)}\\
+This function writes data to a packet. Inside \emph{packetEncoder.c} there is the definition of \emph{\_packetEncoderWrite} which is \emph{static}. By definition of \emph{static} keyword, a function declared \emph{static} cannot be seen outside the file it was defined in. So, if they are the same function, it is not clear why it is also defined in header file.
+
+\item\emph{void packetEncoderFlush(EtnEncoder *e)}\\
+This function flushes packet encoder, sending the packet as the final fragment. Inside \emph{packetEncoder.c} there is the definition of \emph{\_packetEncoderFlush} which is static. By definition of \emph{static} keyword, a function declared \emph{static} cannot be seen outside the file it was defined in. So, if they are the same function, it is not clear why it is also defined in header file.
+
+\end{itemize}

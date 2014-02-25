@@ -6,7 +6,6 @@ The global variable declared and defined here is:
 \item DebugFlagDesc debugFlagDesc[]\\
 This is simply an array of debug flags. It is in \emph{rpc.c} because it is used from both \emph{Ethos} and \emph{Dom0} even though it is not RPC-specific. 
 \end{itemize}
-
 In this file, there are some debug purpose functions. They are used to send a ping between both Shadowdaemon and Terminal. Here they are:
 \begin{itemize}
 \item \emph{void rpcShadowDaemonPing (EtnRpcHost *h, uint64\_t eventId)}\\
@@ -16,7 +15,6 @@ Parameters \emph{h} and \emph{eventId} are useless in this function since they a
 \item \emph{void rpcTerminalPingReply (EtnRpcHost *h, uint64\_t eventId, Status status)}\\
 Parameters \emph{h} and \emph{eventId} are useless in this function since they are not used.
 \end{itemize}
-
 The other functions defined here are:
 
 \begin{itemize}
@@ -24,5 +22,5 @@ The other functions defined here are:
 This function initialize the interfaces. All the variables that are initialized are global variables declared in \emph{rpc.h} and defined in \emph{packetEncoder.c}. For each Ethos primary component a packet encoder is defined. Then, a null encoder and a buffer decoder are also defined. These five interfaces, in addiction to the servers of each primary component, are used to define the interface host of each primary component.\\
 This function contains very bad casts since they are memory allocation dependent.
 \item \emph{void rpcInit(void)}\\
-This function calls some other functions that initialize rpc components. The declaration is inside \emph{rpc.h}
+This function calls some other functions that initialize rpc components. The declaration is inside \emph{rpc.h}.
 \end{itemize}
