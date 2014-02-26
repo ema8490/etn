@@ -1,5 +1,5 @@
 \section{notes}
-Here the list of problems that were found in the previous files:
+Here the list of problems that have been found in the previous files:
 \begin{itemize}
 
 \item \textbf{rpc.c}
@@ -38,22 +38,12 @@ This function contains a very bad cast since it is memory allocation dependent.
 
 \item \textbf{connection.h}
 \begin{itemize}
-\item connection.h problems
+\item The function \emph{void sendOnConnection(Connection *connection, Packet *packet)} is declared in \emph{connection.h} but it is not implemented in \emph{connection.c}, nor it is used anywhere anymore.
 \end{itemize}
 
 \item \textbf{connection.c}
 \begin{itemize}
-\item conection.c problems
-\end{itemize}
-
-\item \textbf{erpc.c}
-\begin{itemize}
-\item erpc.c problems
-\end{itemize}
-
-\item \textbf{etn.h}
-\begin{itemize}
-\item etn.h problems
+\item In many functions defined here, \emph{tunnelPacketCreate()} and its variants \emph{tunnelPacketCreateEmpty()}, \emph{tunnelPacketCreateFirst()} are often used. Since most of the code used into these functions is the same, it would be better to incorporate it into a common, generic, \emph{packetCreate()} to improve readability and diminish lines of code.
 \end{itemize}
 
 \end{itemize}

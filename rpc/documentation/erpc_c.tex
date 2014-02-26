@@ -1,1 +1,36 @@
-\section{erpc.c} 
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+
+\lstset{language=C, breaklines=true, numbers=left, numberstyle=\tiny\color{mygray}, stringstyle=\color{mymauve}, keywordstyle=\color{blue}, commentstyle=\color{mygreen}}
+
+\section{erpc.c}
+
+The main structure of \textbf{erpc.c} is EtnRpcHost, which is defined as follows:
+
+\begin{lstlisting}
+/* Represents a Remote Procedure Call Host */
+struct EtnRpcHost {
+	EtnValue v; // value holded by the host (@see types.h)
+	EtnEncoder *e; // host encoder (@see etn.h)
+	EtnDecoder *d; // host decoder (@see etn.h)
+};
+\end{lstlisting}
+
+The following functions are also implemented and exported by the header file \emph{etn.h}.
+
+\begin{itemize}
+
+	\item \emph{EtnRpcHost* etnRpcHostNew(EtnValue v, EtnEncoder *e, EtnDecoder *d)}
+	\\Given a EtnValue, EtnEncoder and EtnDecoder creates and return an EtnRpcHost
+
+	\item \emph{EtnEncoder* etnRpcHostGetEncoder (EtnRpcHost *host)}
+	\\Given a EtnRpcHost, returns its EtnEncoder (used in kernel)
+
+	\item \emph{Status etnRpcCall(EtnRpcHost *h, EtnCallId call, EtnValue args, EtnLength *length)}
+	\\Given EtnRpcHost (that contains the encoder to perform the rpc call), EtnCallId (that is the id of the called method), EtnValue (that are the arguments that the called method takes as input); does a rpc call and returns the Status of the call (StatusOk is returned if everything works) and the length of the encoded elements in the rpc (length of the encoded call id + length of the encoded arguments the method takes in input)
+ 
+	\item \emph{Status etnRpcHandle(EtnRpcHost *h)}
+	\\Given EtnRpcHost (that contains the EtnValue v and then the method, and its arguments, to which we want perform a call), does the rpc and return the status of it
+	
+\end{itemize}

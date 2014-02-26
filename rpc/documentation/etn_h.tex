@@ -1,1 +1,38 @@
 \section{etn.h}
+
+The header \emph{etn.h} exports many functions and structures, but here we show only those ones related to Remote Procedure Calls.
+
+The main structures are EtnEncoder and EtnDecoder, which are fileds of EtnRpcHost:
+
+\begin{lstlisting}
+typedef struct EtnEncoder_s {
+	int (*write)(struct EtnEncoder_s *e, uint8_t *data, EtnLength length);
+	void (*flush)(struct EtnEncoder_s *e);
+	void *topLevelPointer; // See comments in encoder.c.
+	struct rbtree addrToIndex;
+	EtnLength index;
+} EtnEncoder;
+\end{lstlisting}
+
+\begin{lstlisting}
+typedef struct EtnDecoder_s {
+	int (*read) (struct EtnDecoder_s *d, uint8_t *data, EtnLength length);
+	void **indexToData;
+	EtnLength indexToDataLength;
+	EtnLength nextIndex;
+} EtnDecoder;
+\end{lstlisting}
+
+It exports also the functions defined in \emph{erpc.c}:
+
+\begin{itemize}
+
+	\item \emph{EtnRpcHost* etnRpcHostNew(EtnValue v, EtnEncoder *e, EtnDecoder *d)}
+
+	\item \emph{EtnEncoder* etnRpcHostGetEncoder (EtnRpcHost *host)}
+
+	\item \emph{Status etnRpcCall(EtnRpcHost *h, EtnCallId call, EtnValue args, EtnLength *length)}
+
+	\item \emph{Status etnRpcHandle(EtnRpcHost *h)}
+
+\end{itemize}

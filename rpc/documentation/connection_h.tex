@@ -1,1 +1,92 @@
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+
+\lstset{language=C, breaklines=true, numbers=left, numberstyle=\tiny\color{mygray}, stringstyle=\color{mymauve}, keywordstyle=\color{blue}, commentstyle=\color{mygreen}}
+
 \section{connection.h}
+
+This header contains the following enum structure in order to classify connection related operation codes:
+
+\begin{lstlisting}
+/* Operation Codes */
+enum Connection_E {
+    NewConnection=0, // request for a new connection
+    AcceptConnection=1, // accept an incoming connection
+    RejectConnection=2, // reject an incoming connection
+    CloseConnection=3, // close a connection 
+    SendOnConnection=4, // send on a connection a middle packet
+    SendOnConnectionF=5, // send on a connection the first packet
+    SendOnConnectionL=6, // send on a connection the last packet
+    SendOnConnectionFL=7 // send on a connection a single packet (first and last packet)
+};
+\end{lstlisting}
+
+Another enum structure is used for the status of a connection:
+
+\begin{lstlisting}
+/* Status of a Connection */
+enum ConnectionStatus_E {
+    ConnectionUnused,
+    ConnectionInitiated,
+    ConnectionEstablished
+};
+\end{lstlisting}
+
+The following constants are declared and defined:
+
+\begin{itemize}
+	
+	\item \emph{static const uint32 connectionOperationShift = 29}
+	\\Constant used for coding inside a packet an operation code;
+	
+	\item \emph{static const uint32 connectionFirstPacket = 1 $<<$ 29}
+	\\Constants used for coding inside a packet information about whether it is the first packet of a Connection or not;
+	
+	\item \emph{static const uint32 connectionLastPacket = 1 $<<$ 30}
+	\\Constants used for coding inside a packet information about whether it is the last packet of a connection or not;
+	
+	\item \emph{static const uint32 connectionSizeMask = (1 $<<$ 29) - 1}
+	
+\end{itemize}
+
+The main structure is Connection:
+
+\begin{lstlisting}
+/* Represents a Connection */
+struct Connection_S {
+    uint32           connectionId;     // outgoing connection number, is tunnel specific (so, it is the same for both sides)
+    ConnectionStatus connectionStatus; // status of connection
+    Connection      *toConnection;     // for either split or merge, next connection
+    uint32           next;             // linked list of incoming descriptors
+    Tunnel          *tunnel;           // the tunnel the connection runs over
+    Packet          *inPacket;         // an incoming packet being assembled
+    RdId             ipcRdId;          // the local RdId for this connection
+};
+\end{lstlisting}
+
+The header exports the following functions:
+
+\begin{itemize}
+
+	\item \emph{int mySideConnectionId(Tunnel *, uint32)}
+
+	\item \emph{void connectionProcessPacket(Connection *connection, Packet *packet)}
+
+	\item \emph{Connection *connectionAlloc(void)}
+
+	\item \emph{void connectionFree(Connection *)
+}
+	\item \emph{void acceptConnection(Connection *connection)}
+
+	\item \emph{Connection *newConnection(Tunnel *tunnel, bool firstPacket)}
+
+	\item \emph{void closeConnection(Connection *connection)}
+
+	\item \emph{void rejectConnection(Tunnel *tunnel, uint32 connectionId)}
+	
+	\item \emph{void sendOnConnection(Connection *connection, Packet *packet)}
+	\\Is declared but not defined in \emph{connection.c} and it is no more used
+	
+\end{itemize}
+

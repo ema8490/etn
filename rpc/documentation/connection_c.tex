@@ -1,1 +1,31 @@
 \section{connection.c} 
+This file implements the exported function declared in \emph{connection.h}:
+
+\begin{itemize}
+
+	\item \emph{int mySideConnectionId(Tunnel *, uint32)}
+	\\Given a Tunnel and an outgoing connection number, checks whether they match (i.e. connectionId and tunnel oddSide are both even or odd)
+
+	\item \emph{void connectionProcessPacket(Connection *connection, Packet *packet)}
+	\\Once all the fragments (network packets) have been received, they are joined into a memory packets and handled by rpcInterfaceTerminalHost, rpcInterfaceShadowDaemonHost, rpcInterfaceKernelHost respectively if the connection tunnel is associated to RpcTerminalServer, RpcShadowDaemonServer, RpcKernelServer
+	
+	\item \emph{Connection *connectionAlloc(void)}
+	\\Creates a new connection allocating the needed memory for the Connection struct
+	
+	\item \emph{void connectionFree(Connection *)}
+	\\Free the allocated memory for the given Connection
+	
+	\item \emph{void acceptConnection(Connection *connection)}
+	\\Given an incoming Connection, accepts it sending a packet with AcceptConnection code as operation and the connectionId 
+	
+	\item \emph{Connection *newConnection(Tunnel *tunnel, bool firstPacket)}
+	\\Creates a new connection associated with the passed tunnel. If there is also a first packet to be sent (firstPacket = true) then it is sent with the NewConnection operation code and the new connectionId (and packet->firstPacket flag is set to true)
+	
+	\item \emph{void closeConnection(Connection *connection)}
+	\\Given a Connection, closes it sending a packet with CloseConnection code as operation and the connectionId
+	
+	\item \emph{void rejectConnection(Tunnel *tunnel, uint32 connectionId)}
+	\\Given an incoming Connection, rejects it sending a packet with RejectConnection code as operation and the connectionId
+	
+\end{itemize}
+

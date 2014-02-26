@@ -15,17 +15,17 @@
 #include <ethos/generic/netCrypto.h>
 #include <ethos/generic/packetEncoder.h>
 
-/* Creates a new connection allocating the needed memory for the connection structure */
+/* Creates a new connection allocating the needed memory for the Connection struct */
 Connection *
 connectionAlloc(void)
 {
     Connection *connection = (Connection *) malloc(sizeof(Connection)); // Allocates the needed memory
-    memzero((void *)connection, sizeof(Connection)); // Initializes the connection structure to zero
+    memzero((void *)connection, sizeof(Connection)); // Initializes the Connection struct fields to zero
 
-    return connection;
+    return connection; // return the created Connection
 }
 
-/* Free the allocated memory for the connection structure */
+/* Free the allocated memory for the given Connection */
 void
 connectionFree(Connection *connection)
 {
@@ -36,14 +36,14 @@ connectionFree(Connection *connection)
 //______________________________________________________________________________
 // connection IDs specify the side of the connection, check that it matches
 //______________________________________________________________________________
-/* Given a tunnel and an outgoing connection number, checks whether they match (connectionId and tunel oddSide are both even or odd)*/
+/* Given a Tunnel and an outgoing connection number, checks whether they match (i.e. connectionId and tunnel oddSide are both even or odd) */
 int
 mySideConnectionId(Tunnel *tunnel, uint32 connectionId)
 {
     ASSERT(tunnel);
 
     int connectionParity = connectionId & 1; // connectionParity states whether connectionId is even or odd
-    return tunnel->envelopeRemote.oddSide == connectionParity; // return 1 if connectionId and tunel oddSide are both even or odd, 0 otherwise
+    return tunnel->envelopeRemote.oddSide == connectionParity; // returns 1 if connectionId and tunel oddSide are both even or odd, 0 otherwise
 }
 
 //_____________________________________________________________________________
@@ -96,7 +96,7 @@ connectionProcessPacket(Connection *connection,
 //______________________________________________________________________________
 /// accept a new connection request
 //______________________________________________________________________________
-/* Given an incoming connection, accepts it sending a packet with AcceptConnection code as operation and the connectionId */
+/* Given an incoming Connection, accepts it sending a packet with AcceptConnection code as operation and the connectionId */
 void
 acceptConnection(Connection *connection)
 {
@@ -105,11 +105,24 @@ acceptConnection(Connection *connection)
     Tunnel    *tunnel = connection->tunnel; // takes the connection tunnel
     ASSERT(tunnel);
 
-    Packet *packet = tunnelPacketCreate(tunnel, 0); // creates an empty packet
+    Packet *packet = tunnelPacketCreate(tunnel, 0); // creates a packet
 
     uint32 operation = AcceptConnection << connectionOperationShift; // generates the AcceptConnection operation code
     putUint32(operation,    packet); // puts the operation code inside the packet
     putUint32(connection->connectionId, packet); // puts the connectionId inside the packet
+	
+	// on accepting a connection, check whether it is a control connection
+    switch(connection->connectionId)
+	{
+	case 1:
+	case 2:
+	    ASSERT(!tunnel->controlConnection);
+	    tunnel->controlConnection = connection;
+	    break;
+	default:
+	    ASSERT(tunnel->controlConnection);
+	    break;
+	}
 
     // the other side allocated
     ASSERT(!mySideConnectionId(tunnel, connection->connectionId));
@@ -123,23 +136,24 @@ acceptConnection(Connection *connection)
 /// first packet is true only if tunnel is initiated from this side and
 /// this is the initial request on the tunnel.
 //______________________________________________________________________________
+/* Given a Connection, closes it sending a packet with CloseConnection code as operation and the connectionId */
 void
 closeConnection(Connection *connection)
 {
     ASSERT(connection);
-    Tunnel *tunnel = connection->tunnel;
-    NetInterface *netInterface = tunnel->netInterface;
+    Tunnel *tunnel = connection->tunnel; // takes the tunnel used by connection
+    NetInterface *netInterface = tunnel->netInterface; // takes the network interface used by tunnel (used for debug purposes)
     ASSERT(netInterface);
 
     // allocates enough space for reliability and connection headers
-    Packet *packet = tunnelPacketCreate(tunnel, 0);
+    Packet *packet = tunnelPacketCreate(tunnel, 0); // creates a packet
 
     ASSERT(packet);
 
     // size of new connection is zero, since there is no
     // authentication data here
-    uint32 operation    = CloseConnection << connectionOperationShift;
-    uint32 connectionId = connection->connectionId;
+    uint32 operation    = CloseConnection << connectionOperationShift; // generates the CloseConnection operation code
+    uint32 connectionId = connection->connectionId; // takes the connectionId
     ASSERT(connectionId);
 
     // this side allocated
@@ -149,27 +163,28 @@ closeConnection(Connection *connection)
 	     netInterface->interfaceNumber,
 	     connectionId);
 
-    putUint32(operation,    packet);
-    putUint32(connectionId, packet);
-    tunnelOut(packet);
+    putUint32(operation,    packet); // puts the operation code inside the packet
+    putUint32(connectionId, packet); // puts the connectionId inside the packet
+    tunnelOut(packet); // sends the packet
 }
 //______________________________________________________________________________
 /// request a new connection within a tunnel.
 /// first packet is true only if tunnel is initiated from this side and
 /// this is the initial request on the tunnel.
 //______________________________________________________________________________
+/* Creates a new connection associated with the passed tunnel. If there is also a first packet to be sent (firstPacket = true) then it is sent with the NewConnection operation code and the new connectionId (and packet->firstPacket flag is set to true) */
 Connection *
 newConnection(Tunnel *tunnel, bool firstPacket)
 {
     ASSERT(tunnel);
 
-    NetInterface *netInterface = tunnel->netInterface;
+    NetInterface *netInterface = tunnel->netInterface; // takes the network interface used by tunnel (used for debug purposes)
     ASSERT(netInterface);
 
     // size of new connection is zero, since there is no
     // authentication data here
-    uint32 operation    = NewConnection << connectionOperationShift;
-    uint32 connectionId = tunnelConnectionAllocate(tunnel);
+    uint32 operation    = NewConnection << connectionOperationShift; // generates the NewConnection operation code
+    uint32 connectionId = tunnelConnectionAllocate(tunnel); // creates a new connection and returns its connectionId
     if (!connectionId)
 	{
 	    return NULL;
@@ -183,22 +198,24 @@ newConnection(Tunnel *tunnel, bool firstPacket)
 	     connectionId);
 
     // allocates enough space for reliability and connection headers.
+	// if with the new created connection there is also a first packet to send, then tunnelPacketCreateFirst allocates the needed memory space, otherwise a packet without anything after reserved area is generated
     Packet *packet = firstPacket 
                    ? tunnelPacketCreateFirst(tunnel, 0) 
                    : tunnelPacketCreate(tunnel, 0);
     ASSERT(packet);
 
-    putUint32(operation,    packet);
-    putUint32(connectionId, packet);
+    putUint32(operation,    packet); // puts the operation code inside the packet
+    putUint32(connectionId, packet); // puts the connectionId inside the packet
 
-    tunnelOut(packet);
+    tunnelOut(packet); // sends the packet
 
-    return tunnel->connectionArray[connectionId];
+    return tunnel->connectionArray[connectionId]; // returns the new connection associated with the current tunnel
 }
 
 //______________________________________________________________________________
 /// refuse a new connection request
 //______________________________________________________________________________
+/* Given an incoming Connection, rejects it sending a packet with RejectConnection code as operation and the connectionId */
 void
 rejectConnection(Tunnel *tunnel, uint32 connectionId)
 {
@@ -208,10 +225,10 @@ rejectConnection(Tunnel *tunnel, uint32 connectionId)
     // the other side allocated
     ASSERT(!mySideConnectionId(tunnel, connectionId));
 
-    uint32 operation = RejectConnection << connectionOperationShift;
-    Packet *packet = tunnelPacketCreate(tunnel, 8);
+    uint32 operation = RejectConnection << connectionOperationShift; // generates the RejectConnection operation code
+    Packet *packet = tunnelPacketCreate(tunnel, 8); // creates a packet (WHY size=8??)
 
-    putUint32(operation,    packet);
-    putUint32(connectionId, packet);
-    tunnelOut(packet);
+    putUint32(operation,    packet); // puts the operation code inside the packet
+    putUint32(connectionId, packet); // puts the connectionId inside the packet
+    tunnelOut(packet); // sends the packet
 }
