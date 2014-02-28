@@ -2,12 +2,13 @@
 \emph{EtnEncoder} is a \lq\lq writer" and can be considered a base class. This data structure contains two function pointers, a \emph{red-black tree} and an index.\\
 The two function pointers are one to a \emph{write} function and one to a \emph{flush} function. The actual implementations of both are declared in the header file \emph{packetEncoder.h} and defined in file \emph{packetEncoder.c}.\\
 The \emph{write} function  writes data to a packet sending fragments as maximum size reached. The final (non-full) fragment is not sent because there may be remaining data to write to it.\\
-The \emph{flush} function flushes packet encoder, sending the packet as the final fragment. Note that if the write does not fill the first fragment, then nothing will be sent until flush is called.
-The \emph{red-black tree} structure is used to 
-
-
-
-
+The \emph{flush} function flushes packet encoder, sending the packet as the final fragment. Note that if the write does not fill the first fragment, then nothing will be sent until flush is called.\\\\
+The \emph{red-black tree} structure is used to \\\\
+the \emph{index} is used to \\\\
+\emph{EtnBufferEncoder} is a specialization of \emph{Encoder}. It encodes to provided memory range. In contains an \emph{encoder} and two pointers to \emph{uint8\_t} type that point to a memory range.\\
+\emph{EtnNullEncoder} is a specialization of \emph{Encoder}. It is actually a quite useless structure since it contains only an \emph{encoder}.
+\emph{PacketEncoder} is specialization of \emph{Encoder}. 
+It encodes to packet and sends it on flush. It contains a \emph{EtnBufferEncoder}, a \emph{Packet}, the total length of the packet, a \emph{boolean} that indicates whether a packet was sent and a \emph{Connection}. 
 
 
 

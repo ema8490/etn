@@ -1,1 +1,5 @@
 \section*{Decoder}
+\emph{EtnDecoder} is a \lq\lq reader" and can be considered a base class. This data structure contains a function pointer to a \emph{read}, a pointer to the data, the data length and an index to the next data. The actual implementation of \emph{read} is defined in file \emph{decoder.c}.\\
+\emph{EtnBufferDecoder} is a specialization of \emph{Decoder}. It encodes to provided memory range. In contains an \emph{decoder} and two pointers to \emph{uint8\_t} type that point to a memory range.\\
+\emph{PathDecoder} is a specialization of \emph{Decoder}. 
+it decodes from provided path. It contains a \emph{EtnBufferDecoder} and a \emph{uint8\_t} to the original data.
