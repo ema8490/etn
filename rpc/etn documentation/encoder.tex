@@ -12,12 +12,20 @@
 }
 
 \section*{Encoder}
-\emph{EtnEncoder} is a \lq\lq writer" and can be considered a base class. This data structure contains two function pointers, a \emph{red-black tree} and an \emph{index}.\\
+\emph{EtnEncoder} is a \lq\lq writer" and can be considered a base class. This data structure contains two function pointers, a \emph{top-level pointer} out of the \emph{red-black tree} (to avoid a malloc for a simple type that contains no pointers or any types), a \emph{red-black tree} and an \emph{index}.
+\begin{lstlisting}
+typedef struct EtnEncoder_s {
+	int (*write)(struct EtnEncoder_s *e, uint8_t *data, EtnLength length);
+	void (*flush)(struct EtnEncoder_s *e);
+	void *topLevelPointer;
+	struct rbtree addrToIndex;
+	EtnLength index;
+} EtnEncoder;
+\end{lstlisting}
 The two function pointers are one to a \emph{write} function and one to a \emph{flush} function. The actual implementations of both are declared in the header file \emph{packetEncoder.h} and defined in file \emph{packetEncoder.c}.\\
 The \emph{write} function  writes data to a packet sending fragments as maximum size reached. The final (non-full) fragment is not sent because there may be remaining data to write into it.\\
 The \emph{flush} function flushes packet encoder, sending the packet as the final fragment. Note that if the write does not fill the first fragment, then nothing will be sent until flush is called.\\
 The \emph{red-black tree} structure is used to remember pointers to some encoded types so that we can handle type loops, e.g.:
-
 \begin{lstlisting}
 typedef struct a_s{
 	B* b;
@@ -33,10 +41,8 @@ typedef struct c_s{
 \end{lstlisting}
 
 Each node of the red-black tree contains a pointer to the encoded datum and its index (which is a unique identifier for each encoded datum of the data set that is going to be encoded). So, looking at the example we have:
-
 \begin{figure}[H]
 \centering
-
 \begin{tikzpicture}[->,>=stealth',level/.style={sibling distance = 5cm/#1,
   level distance = 3cm}] 
 \node [arn_n] {A \\ addr(A) \\ index=1}
@@ -49,53 +55,30 @@ Each node of the red-black tree contains a pointer to the encoded datum and its 
 
 \caption{Type loops example}
 \end{figure}
-
 Red-black trees are not used for data of any type (it has no sense to use them for encoding data of simple type like integers, chars or structure without pointers, for instance), but only for the pointer to the type that was passed to \emph{encode()} and all \emph{EtnKindPtrs} and \emph{EtnKindAnys} types. \\
 The \emph{index} is a counter incremented every time an \emph{encode()} function (that encode each datum of the data set that is being encoded) is called. \\
-With \emph{encode()} function we mean the set of functions which encode each type of data supported by ETN, from integers to maps, unions, tuples etc.. They are defined in \emph{encode.c} and an \emph{EncoderMap} is used to call the right \emph{encode()} function for each data type.
-\emph{EtnBufferEncoder} is a specialization of \emph{EtnEncoder}. It encodes to provided memory range. In contains an \emph{EtnEncoder} and two pointers to \emph{uint8\_t} type that point to a memory range.\\
-\emph{EtnNullEncoder} is a specialization of \emph{Encoder}. It is actually a quite useless structure since it contains only an \emph{EtnEncoder}.
-\emph{PacketEncoder} is specialization of \emph{EtnEncoder}. 
-It encodes to packet and sends it on flush. It contains a \emph{EtnBufferEncoder}, a \emph{Packet}, the total length of the packet, a \emph{boolean} that indicates whether a packet was sent and a \emph{Connection}. 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\begin{comment}
-// The parent encoder class.
-typedef struct EtnEncoder_s {
-	int (*write)(struct EtnEncoder_s *e, uint8_t *data, EtnLength length);
-	void (*flush)(struct EtnEncoder_s *e);
-	void *topLevelPointer; // See comments in encoder.c.
-	struct rbtree addrToIndex;
-	EtnLength index;
-} EtnEncoder;
-
-// Encoder subclass that encodes to provided memory range.
+With \emph{encode()} function we mean the set of functions which encode each type of data supported by ETN, from integers to maps, unions, tuples etc.. They are defined in \emph{encode.c} and an \emph{EncoderMap} is used to call the right \emph{encode()} function for each data type.\\\\
+\emph{EtnBufferEncoder} is a specialization of \emph{EtnEncoder}. It encodes to provided memory range. In contains an \emph{EtnEncoder} and two pointers to \emph{uint8\_t} type that point to a memory range.
+\begin{lstlisting}
 typedef struct EtnBufferEncoder_s {
 	EtnEncoder encoder;
 	uint8_t *dataCurrent;
 	uint8_t *dataEnd;
 } EtnBufferEncoder;
-
-// Encoder subclass that throws away encoded data;
-// useful to determine what size of encoded data will be.
+\end{lstlisting}
+\emph{EtnNullEncoder} is a specialization of \emph{Encoder}. It is actually a quite useless structure since it contains only an \emph{EtnEncoder}.
+\begin{lstlisting}
 typedef struct EtnNullEncoder_s {
 	EtnEncoder encoder;
 } EtnNullEncoder;
-\end{comment}
+\end{lstlisting}
+\emph{PacketEncoder} is specialization of \emph{EtnEncoder}. It encodes into packet and sends it on flush. It contains a \emph{EtnBufferEncoder}, a \emph{Packet}, the total length of the packet, a \emph{boolean} that indicates whether a packet was sent and a \emph{Connection}.
+\begin{lstlisting}
+typedef struct PacketEncoder_s {
+	EtnBufferEncoder encoder;
+	Packet          *packet;
+	uint32_t         totalLength;
+	bool             packetSent;
+	Connection      *connection;
+} PacketEncoder;
+\end{lstlisting}

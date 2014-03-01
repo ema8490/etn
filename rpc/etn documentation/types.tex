@@ -1,0 +1,27 @@
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+
+\lstset{
+	language=C, 
+	breaklines=true, 
+	numbers=left, 
+	numberstyle=\tiny\color{mygray}, 
+	stringstyle=\color{mymauve}, 
+	keywordstyle=\color{blue}, 
+	commentstyle=\color{mygreen}
+}
+
+\section*{Types}
+\textbf{ETN} types are all defined in file \emph{types.h}.
+As we can see, the encoders/decoders do not interact directly with the types. Indeed, the encoder/decoder type does not contain the type to be encoded/decoded. The interaction between them comes from other data structures that contain them all.\\
+For instance, data structure \emph{EtnRpcHost} (defined in \emph{erpc.c} file and used for interprocess-communication):
+\begin{lstlisting}
+struct EtnRpcHost {
+	EtnValue v;
+	EtnEncoder *e;
+	EtnDecoder *d;
+};
+\end{lstlisting}
+
+

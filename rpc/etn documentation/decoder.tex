@@ -1,5 +1,52 @@
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+
+\lstset{
+	language=C, 
+	breaklines=true, 
+	numbers=left, 
+	numberstyle=\tiny\color{mygray}, 
+	stringstyle=\color{mymauve}, 
+	keywordstyle=\color{blue}, 
+	commentstyle=\color{mygreen}
+}
+
 \section*{Decoder}
-\emph{EtnDecoder} is a \lq\lq reader" and can be considered a base class. This data structure contains a function pointer to a \emph{read}, a pointer to the data, the data length and an index to the next data. The actual implementation of \emph{read} is defined in file \emph{decoder.c}.\\
-\emph{EtnBufferDecoder} is a specialization of \emph{Decoder}. It encodes to provided memory range. In contains an \emph{decoder} and two pointers to \emph{uint8\_t} type that point to a memory range.\\
-\emph{PathDecoder} is a specialization of \emph{Decoder}. 
-it decodes from provided path. It contains a \emph{EtnBufferDecoder} and a \emph{uint8\_t} to the original data.
+\emph{EtnDecoder} is a \lq\lq reader" and can be considered a base class. This data structure contains a function pointer to a \emph{read} function, a pointer to the data, the data length and an index to the next data.
+\begin{lstlisting}
+typedef struct EtnDecoder_s {
+	int (*read) (struct EtnDecoder_s *d, uint8_t *data, EtnLength length);
+	void **indexToData;
+	EtnLength indexToDataLength;
+	EtnLength nextIndex;
+} EtnDecoder;
+\end{lstlisting}
+The actual implementation of \emph{read} is defined in file \emph{decoder.c}.\\\\
+\emph{EtnBufferDecoder} is a specialization of \emph{EtnDecoder}. It decodes to a provided memory range. In contains a \emph{EtnDecoder} and two pointers to the memory range.
+\begin{lstlisting}
+typedef struct EtnBufferDecoder_s {
+	EtnDecoder decoder;
+	uint8_t *dataCurrent;
+	uint8_t *dataEnd;
+} EtnBufferDecoder;
+\end{lstlisting}
+\emph{PathDecoder} is a specialization of \emph{EtnDecoder}.
+It decodes from a provided path. It contains a \emph{EtnBufferDecoder} and a pointer to the original data.
+\begin{lstlisting}
+typedef struct EtnPathDecoder_s {
+	EtnBufferDecoder bufferDecoder;
+	uint8_t *dataOriginal;
+} EtnPathDecoder;
+\end{lstlisting}
+
+
+
+
+
+
+
+
+
+
+
