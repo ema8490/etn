@@ -22,7 +22,7 @@ typedef struct EtnDecoder_s {
 	EtnLength nextIndex;
 } EtnDecoder;
 \end{lstlisting}
-The actual implementation of \emph{read} is defined in file \emph{decoder.c}.\\\\
+The actual implementation of \emph{read} is defined in file \emph{decoder.c}.\\
 \emph{EtnBufferDecoder} is a specialization of \emph{EtnDecoder}. It decodes to a provided memory range. In contains a \emph{EtnDecoder} and two pointers to the memory range.
 \begin{lstlisting}
 typedef struct EtnBufferDecoder_s {
@@ -39,14 +39,3 @@ typedef struct EtnPathDecoder_s {
 	uint8_t *dataOriginal;
 } EtnPathDecoder;
 \end{lstlisting}
-
-
-
-
-
-
-
-
-
-
-
