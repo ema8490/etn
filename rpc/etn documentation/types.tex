@@ -23,5 +23,27 @@ struct EtnRpcHost {
 	EtnDecoder *d;
 };
 \end{lstlisting}
+Here an example (from file \emph{testPointer.c}) on how a value of type \emph{pointer} is encoded and decoded (actions needed to encode/decode other types are similar).
 
 
+\begin{lstlisting}
+static bool _predicate(void){
+	uint8_t *in = malloc (sizeof (uint8_t)), *out;
+	*in = 0xbe;
+
+	uint8_t buf[1024];
+	EtnBufferEncoder *e = etnBufferEncoderNew(buf, sizeof(buf));
+	EtnLength encodedSize;
+	etnEncode((EtnEncoder *) e, EtnToValue(&Uint8PtrType, &in), &encodedSize);
+
+	EtnBufferDecoder *d = etnBufferDecoderNew(buf, encodedSize);
+	etnDecode((EtnDecoder *) d, EtnToValue(&Uint8PtrType, &out));
+
+	free (e);
+	etnBufferDecoderFree (d);
+
+	return *in == *out;
+}
+\end{lstlisting}
+A pointer to a \emph{uint8\_t} is allocated and initialized at the value \emph{0xbe} (\emph{in}), while another one is declared (\emph{out}). An \emph{EtnBufferEncoder} is created and the function \emph{etnEncode()} is called to encode the value of the \emph{in} pointer, which is going to be written into the buffer. Then, an \emph{EtnBufferDecoder} is created using the same buffer of \emph{EtnBufferEncoder}. The function \emph{etnDecode()} is used to decode the content of the buffer and the result is inside \emph{out} pointer. Eventually, the test returns true if the content of the two pointers (\emph{in} and \emph{out}) is the same, false otherwise.\\
+So, we can notice the only link between the \emph{EtnEncoder} and \emph{EtnDecoder} is the common buffer \emph{buf}. The \emph{macro} \emph{EtnToValue} takes in input the \emph{type} and the value and returns a variable of type \emph{EtnValue} that contains both the pointer to the value (\emph{void*}) and the type (\emph{EtnType}).
