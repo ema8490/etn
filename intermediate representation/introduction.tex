@@ -1,4 +1,7 @@
 \section*{Introduction}
 
+We give here a brief introduction on how the \emph{el} compiler is implemented so far what can be done to improve it.
 
-clargfwr
+Right now there isn't a proper Intermediate Representation (IR) code generation (it is like \emph{PyPy} before \emph{Just-in-Time} compiler was introduced). \emph{el} code is tokenized by a lexer (\emph{lexer.go}), parsed by Bison (\emph{parser.y}), and an Abstract Syntax Tree (AST) of the code is built; then, evaluating each node, the code is compiled. Each statement and operation is executed in \emph{go} (e.g. an \emph{el} sum becomes a sum in \emph{go} and then the result is returned). In such way the Abstract Syntax Tree itself is used as an high level IR.
+
+This approach has the advantage of simplicity (the AST itself is the IR), but using an explicit IR (which is the "standard way" to build a compiler) turns into a simpler and more readable representation of the code.
