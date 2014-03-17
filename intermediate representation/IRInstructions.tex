@@ -1,3 +1,28 @@
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+
+\lstset{
+	breaklines=true, 
+	numbers=left, 
+	numberstyle=\tiny\color{mygray}, 
+	stringstyle=\color{mymauve}, 
+	keywordstyle=\color{blue}, 
+	commentstyle=\color{mygreen}
+}
 \section*{IR Instructions}
+All the instructions are defined by this data structure:
+\begin{lstlisting}
+type Intruction struct{
+	op	int
+	arg1	Symbol
+	arg2	Symbol
+	result	Symbol
+	true	*Instruction
+	false	*Instruction
+	next	*Instruction
+}
+\end{lstlisting}
+
 
 \input{binaryOp.tex} 
