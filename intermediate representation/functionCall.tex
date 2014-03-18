@@ -1,0 +1,30 @@
+\subsection*{Function Call}
+
+The IR for a function call is as follows:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{ll}
+\$x = some\_function("\%d", \$k+1)
+\end{tabular}
+\end{table}
+
+becomes:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{ll}
+$Instr_1$ & op: PARAM \tab arg1: "\%d" \tab arg2: NULL \tab result: NULL\tab true: NULL\tab false: NULL\tab next: $Istr_2$\\
+$Instr_2$ & op: ADD \tab arg1: \$k \tab arg2: 1 \tab result: $t_1$ \tab true: \emph{TRUE}\tab false: \emph{FALSE}\tab next: $Instr_3$\\
+$Instr_3$ & op: PARAM \tab arg1: $t_1$ \tab arg2: NULL \tab result: NULL \tab true: NULL \tab false: NULL \tab next: $Instr_4$\\
+$Instr_4$ & op: CALL \tab arg1: some\_function \tab arg2: 2 \tab result: $t_2$ \tab true: NULL \tab false: NULL \tab next: $Instr_5$\\
+$Instr_5$ & op: ASSIGNMENT \tab arg1: $t_2$ \tab arg2: NULL \tab result: \$x \tab true: NULL \tab false: NULL \tab next: $Instr_6$\\
+$Instr_6$ & \dots\\
+\end{tabular}
+\end{table}
+
+So, first of all the function parameters are evaluated and then the function call is performed.
+
+Since we can have nested function calls, it is necessary to keep track of the number of parameters of each function; we do that using in the CALL instruction the number of needed parameters as second argument (the first one is the called function).
+
+The run-time routines will handle procedure parameter passing, calls and return operations. The CALL instruction will execute the arg1 function using the arg2 needed parameters.

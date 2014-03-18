@@ -1,1 +1,30 @@
- 
+\subsection*{Conditional Jumps}
+A conditional jump occurs when there is a \emph{jump} that depends on the evaluation of a condition. Control statements like \emph{IF\_THEN}, \emph{IF\_THEN\_ELSE} and \emph{FOR} use conditional jumps. Here's an example of \emph{IF\_THEN\_ELSE} control statement: 
+
+\textbf{EL} code:
+\begin{table}[H]
+\centering
+\begin{tabular}{ll}
+if \$a $<$ \$b \{\\
+\tab \$x=\$y\\
+\}\\
+else \{\\
+\tab \$x=\$z\\
+\}
+\end{tabular}
+\end{table}
+
+Intermediate representation:
+\begin{table}[H]
+\centering
+\begin{tabular}{ll}
+$Instr_1$ & op: L\_COMPARISON\tab arg1: \$a \tab arg2: \$b \tab result: $t_1$\tab true: NULL\tab false: NULL\tab next: $Istr_2$\\
+$Instr_2$ & op: BNEQ \tab arg1: $t_1$ \tab arg2: NULL result: NULL \tab true: \emph{TRUE}\tab false: \emph{FALSE}\tab next: NULL\\
+\emph{Label} & \emph{TRUE}\\
+$Instr_3$ & op: ASSIGNMENT\tab arg1: \$y \tab result: \$x \tab true: NULL \emph{BODY}\tab false: NULL \tab next: \emph{OUT}\\
+\emph{Label} & \emph{FALSE}\\
+$Instr_4$ & op: ASSIGNMENT\tab arg1: \$z \tab result: \$x \tab true: NULL \emph{BODY}\tab false: NULL \tab next: \emph{OUT}\\
+\emph{Label} & \emph{OUT}\\
+$Instr_5$ & \dots\\
+\end{tabular}
+\end{table}

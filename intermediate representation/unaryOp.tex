@@ -12,4 +12,21 @@ The unary operations defined in \textbf{EL} are:
 	
 \end{itemize}
 
-
+An example is:\\
+\textbf{EL} instruction:
+\begin{table}[H]
+\centering
+\begin{tabular}{ll}
+\$x=-\$y
+\end{tabular}
+\end{table}
+\tab\\
+Intermediate representation:
+\begin{table}[H]
+\centering
+\begin{tabular}{ll}
+$Instr_1$ & op: UNARY\_MINUS\tab arg1: \$y\tab arg2: NULL\tab result: $\$x_1$\tab true: NULL\tab false: NULL\tab next: $Istr_2$\\
+$Instr_2$ & op: ASSIGNMENT\tab arg1: $\$x_1$\tab arg2: NULL\tab result: $\$x$\tab true: NULL\tab false: NULL\tab next: $Istr_3$\\
+$Instr_3$ & \ldots
+\end{tabular}
+\end{table} 
