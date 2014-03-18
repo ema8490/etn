@@ -14,15 +14,15 @@ Intermediate representation:
 \begin{table}[H]
 \centering
 \begin{tabular}{ll}
-$Instr_1$ & op: ASSIGN\tab arg1: 0\tab result: $\$i$\tab true: NULL\tab false: NULL\tab next: $Istr_2$\\
+$Instr_1$ & op: ASSIGNMENT\tab arg1: 0\tab arg2: NULL\tab result: $\$i$\tab true: NULL\tab false: NULL\tab next: $Istr_2$\\
 \emph{Label} & \emph{CONDITION}\\
 $Instr_2$ & op: LOWER\tab arg1: \$i\tab arg2: 10 result: $t_1$\tab true: NULL\tab false: NULL\tab next: $Istr_3$\\
-$Instr_3$ & op: JUMP\tab arg1: $t_1$\tab true: \emph{BODY}\tab false: \emph{OUT}\\
+$Instr_3$ & op: JUMP\tab arg1: $t_1$\tab arg2: NULL\tab true: \emph{BODY}\tab false: \emph{OUT}\tab next: NULL\\
 \emph{Label} & \emph{BODY}\\
-$Instr_4$ & op: U\_JUMP\tab next: \emph{OUT}\\
+$Instr_4$ & op: U\_JUMP\tab arg1: NULL\tab arg2: NULL\tab true: NULL\tab false: NULL\tab next: \emph{OUT}\\
 $Instr_5$ & op: ADD\tab arg1: \$i\tab arg2: 1\tab result: $\$i_1$\tab true: NULL\tab false: NULL\tab next: $Instr_6$\\
-$Instr_6$ & op: ASSIGN\tab arg1: $\$i_1$\tab result: $\$i$\tab true: NULL\tab false: NULL\tab next: $Instr_7$\\
-$Instr_7$ & op: U\_JUMP\tab next: \emph{CONDITION}\\
+$Instr_6$ & op: ASSIGNMENT\tab arg1: $\$i_1$\tab arg2: NULL\tab result: $\$i$\tab true: NULL\tab false: NULL\tab next: $Instr_7$\\
+$Instr_7$ & op: U\_JUMP\tab arg1: NULL\tab arg2: NULL\tab true: NULL\tab false: NULL\tab \emph{CONDITION}\\
 \emph{Label} & \emph{OUT}\\
 $Instr_8$ & \dots\\
 \end{tabular}
@@ -42,15 +42,15 @@ Intermediate representation:
 \begin{table}[H]
 \centering
 \begin{tabular}{ll}
-$Instr_1$ & op: ASSIGN\tab arg1: 0\tab result: $\$i$\tab true: NULL\tab false: NULL\tab next: $Istr_2$\\
+$Instr_1$ & op: ASSIGNMENT\tab arg1: 0\tab arg2: NULL\tab result: $\$i$\tab true: NULL\tab false: NULL\tab next: $Istr_2$\\
 \emph{Label} & \emph{CONDITION}\\
 $Instr_2$ & op: LOWER\tab arg1: \$i\tab arg2: 10 result: $t_1$\tab true: NULL\tab false: NULL\tab next: $Istr_3$\\
-$Instr_3$ & op: JUMP\tab arg1: $t_1$\tab true: \emph{BODY}\tab false: \emph{OUT}\\
+$Instr_3$ & op: JUMP\tab arg1: $t_1$\tab arg2: NULL\tab true: \emph{BODY}\tab false: \emph{OUT}\tab next: NULL\\
 \emph{Label} & \emph{BODY}\\
-$Instr_4$ & op: U\_JUMP\tab next: \emph{CONDITION}\\
+$Instr_4$ & op: U\_JUMP\tab arg1: NULL\tab arg2: NULL\tab true: NULL\tab false: NULL\tab next: \emph{CONDITION}\\
 $Instr_5$ & op: ADD\tab arg1: \$i\tab arg2: 1\tab result: $\$i_1$\tab true: NULL\tab false: NULL\tab next: $Instr_6$\\
-$Instr_6$ & op: ASSIGN\tab arg1: $\$i_1$\tab result: $\$i$\tab true: NULL\tab false: NULL\tab next: $Instr_7$\\
-$Instr_7$ & op: U\_JUMP\tab next: \emph{CONDITION}\\
+$Instr_6$ & op: ASSIGNMENT\tab arg1: $\$i_1$\tab arg2: NULL\tab result: $\$i$\tab true: NULL\tab false: NULL\tab next: $Instr_7$\\
+$Instr_7$ & op: U\_JUMP\tab arg1: NULL\tab arg2: NULL\tab true: NULL\tab false: NULL\tab next: \emph{CONDITION}\\
 \emph{Label} & \emph{OUT}\\
 $Instr_8$ & \dots\\
 \end{tabular}

@@ -21,7 +21,7 @@ Intermediate representation:
 \begin{tabular}{ll}
 $Instr_1$ & op: ADD\tab arg1: \$y\tab arg2: \$w\tab result: $\$x_1$\tab true: NULL\tab false: NULL\tab next: $Istr_2$\\
 $Instr_2$ & op: ADD\tab arg1: $\$x_1$\tab arg2: \$z\tab result: $\$x_2$\tab true: NULL\tab false: NULL\tab next: $Istr_3$\\
-$Instr_3$ & op: ASSIGN\tab arg1: $\$x_2$\tab result: \$x\tab true: NULL\tab false: NULL\tab next: $Istr_4$\\
+$Instr_3$ & op: ASSIGNMENT\tab arg1: $\$x_2$\tab arg2: NULL\tab result: \$x\tab true: NULL\tab false: NULL\tab next: $Istr_4$\\
 $Instr_4$ & \ldots
 \end{tabular}
 \end{table}
@@ -40,7 +40,7 @@ Intermediate representation:
 \centering
 \begin{tabular}{ll}
 $Instr_1$ & op: SQUARE\_ACCESS\tab arg1: \$a\tab arg2: \$i\tab result: $\$x_1$\tab true: NULL\tab false: NULL\tab next: $Istr_2$\\
-$Instr_2$ & op: ASSIGN\tab arg1: $\$x_1$\tab result: \$x\tab true: NULL\tab false: NULL\tab next: $Istr_3$\\
+$Instr_2$ & op: ASSIGNMENT\tab arg1: $\$x_1$\tab arg2: NULL\tab result: \$x\tab true: NULL\tab false: NULL\tab next: $Istr_3$\\
 $Instr_3$ & \ldots
 \end{tabular}
 \end{table}
