@@ -6,7 +6,21 @@ The binary operations defined in \textbf{EL} are:
 \item comparison operations (\emph{EQUAL}, \emph{NOT\_EQUAL}, \emph{LOWER}, \emph{GREATER}, \emph{LOWER\_EQUAL}, \emph{GREATER\_EQUAL}).
 \end{itemize}
 An example is:\\
-\textbf{EL} instruction: \[x=y+w+z\]
-intermediate representation: \[Istr_1\mathtab\mathtab op:ADD\mathtab arg1:y\mathtab arg2:w\mathtab result:x_1\mathtab true:NULL\mathtab false:NULL\mathtab next:Istr_2\]
-\[Istr_2\mathtab\mathtab op:ADD\mathtab arg1:x_1\mathtab arg2:z\mathtab result:x\mathtab true:NULL\mathtab false:NULL\mathtab next:Istr_3\]
-\[\ldots\] 
+\textbf{EL} instruction:
+\begin{table}[H]
+\centering
+\begin{tabular}{ll}
+$Istr_1$ & \$x=\$y+\$w+\$z
+\end{tabular}
+\end{table}
+\tab\\
+Intermediate representation:
+\begin{table}[H]
+\centering
+\begin{tabular}{ll}
+$Instr_1$ & op: ADD\tab arg1: \$y\tab arg2: \$w\tab result: $\$x_1$\tab true: NULL\tab false: NULL\tab next: $Istr_2$\\
+$Instr_2$ & op: ADD\tab arg1: $\$x_1$\tab arg2: \$z\tab result: $\$x_2$\tab true: NULL\tab false: NULL\tab next: $Istr_3$\\
+$Instr_3$ & op: ASSIGN\tab arg1: $\$x_2$\tab result: \$x\tab true: NULL\tab false: NULL\tab next: $Istr_4$\\
+$Instr_4$ & \ldots
+\end{tabular}
+\end{table} 

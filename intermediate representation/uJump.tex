@@ -1,0 +1,56 @@
+\subsection*{Unconditional Jumps}
+An unconditional jump occurs when there is a \emph{jump} that does not depend on the evaluation of any condition. Keywords such as \emph{break} and \emph{continue} are examples of unconditional jumps. Here's an example of \emph{break} keyword:\\
+\textbf{EL} instruction:
+\begin{table}[H]
+\centering
+\begin{tabular}{ll}
+$Instr_1$ & for \$i = 0; \$i $<$ 10; \$i = \$i + 1 \{\\
+$Instr_2$ & \tab break \}
+\end{tabular}
+\end{table}
+\tab\\
+Intermediate representation:
+\begin{table}[H]
+\centering
+\begin{tabular}{ll}
+$Instr_1$ & op: ASSIGN\tab arg1: 0\tab result: $\$i$\tab true: NULL\tab false: NULL\tab next: $Istr_2$\\
+\emph{Label} & \emph{CONDITION}\\
+$Instr_2$ & op: LOWER\tab arg1: \$i\tab arg2: 10 result: $t_1$\tab true: NULL\tab false: NULL\tab next: $Istr_3$\\
+$Instr_3$ & op: JUMP\tab arg1: $t_1$\tab true: \emph{BODY}\tab false: \emph{OUT}\\
+\emph{Label} & \emph{BODY}\\
+$Instr_4$ & op: U\_JUMP\tab next: \emph{OUT}\\
+$Instr_5$ & op: ADD\tab arg1: \$i\tab arg2: 1\tab result: $\$i_1$\tab true: NULL\tab false: NULL\tab next: $Instr_6$\\
+$Instr_6$ & op: ASSIGN\tab arg1: $\$i_1$\tab result: $\$i$\tab true: NULL\tab false: NULL\tab next: $Instr_7$\\
+$Instr_7$ & op: U\_JUMP\tab next: \emph{CONDITION}\\
+\emph{Label} & \emph{OUT}\\
+$Instr_8$ & \dots\\
+\end{tabular}
+\end{table}
+
+Here's an example of \emph{continue} keyword:\\
+\textbf{EL} instruction:
+\begin{table}[H]
+\centering
+\begin{tabular}{ll}
+$Instr_1$ & for \$i = 0; \$i $<$ 10; \$i = \$i + 1 \{\\
+$Instr_2$ & \tab continue \}
+\end{tabular}
+\end{table}
+\tab\\
+Intermediate representation:
+\begin{table}[H]
+\centering
+\begin{tabular}{ll}
+$Instr_1$ & op: ASSIGN\tab arg1: 0\tab result: $\$i$\tab true: NULL\tab false: NULL\tab next: $Istr_2$\\
+\emph{Label} & \emph{CONDITION}\\
+$Instr_2$ & op: LOWER\tab arg1: \$i\tab arg2: 10 result: $t_1$\tab true: NULL\tab false: NULL\tab next: $Istr_3$\\
+$Instr_3$ & op: JUMP\tab arg1: $t_1$\tab true: \emph{BODY}\tab false: \emph{OUT}\\
+\emph{Label} & \emph{BODY}\\
+$Instr_4$ & op: U\_JUMP\tab next: \emph{CONDITION}\\
+$Instr_5$ & op: ADD\tab arg1: \$i\tab arg2: 1\tab result: $\$i_1$\tab true: NULL\tab false: NULL\tab next: $Instr_6$\\
+$Instr_6$ & op: ASSIGN\tab arg1: $\$i_1$\tab result: $\$i$\tab true: NULL\tab false: NULL\tab next: $Instr_7$\\
+$Instr_7$ & op: U\_JUMP\tab next: \emph{CONDITION}\\
+\emph{Label} & \emph{OUT}\\
+$Instr_8$ & \dots\\
+\end{tabular}
+\end{table}
