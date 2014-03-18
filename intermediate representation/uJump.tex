@@ -1,14 +1,15 @@
 \subsection*{Unconditional Jumps}
-An unconditional jump occurs when there is a \emph{jump} that does not depend on the evaluation of any condition. Keywords such as \emph{break} and \emph{continue} are examples of unconditional jumps. Here's an example of \emph{break} keyword:\\
+An unconditional jump occurs when there is a \emph{jump} that does not depend on the evaluation of any condition. Keywords such as \emph{break} and \emph{continue} are examples of unconditional jumps. Here's an example of \emph{break} keyword:
+
 \textbf{EL} instruction:
 \begin{table}[H]
 \centering
-\begin{tabular}{ll}
-$Instr_1$ & for \$i = 0; \$i $<$ 10; \$i = \$i + 1 \{\\
-$Instr_2$ & \tab break \}
+\begin{tabular}{l}
+for \$i = 0; \$i $<$ 10; \$i = \$i + 1 \{\\
+\tab break\\
+\}
 \end{tabular}
 \end{table}
-\tab\\
 Intermediate representation:
 \begin{table}[H]
 \centering
@@ -26,17 +27,17 @@ $Instr_7$ & op: U\_JUMP\tab next: \emph{CONDITION}\\
 $Instr_8$ & \dots\\
 \end{tabular}
 \end{table}
+Here's an example of \emph{continue} keyword:
 
-Here's an example of \emph{continue} keyword:\\
 \textbf{EL} instruction:
 \begin{table}[H]
 \centering
-\begin{tabular}{ll}
-$Instr_1$ & for \$i = 0; \$i $<$ 10; \$i = \$i + 1 \{\\
-$Instr_2$ & \tab continue \}
+\begin{tabular}{l}
+for \$i = 0; \$i $<$ 10; \$i = \$i + 1 \{\\
+\tab continue\\
+\}
 \end{tabular}
 \end{table}
-\tab\\
 Intermediate representation:
 \begin{table}[H]
 \centering

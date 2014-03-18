@@ -3,17 +3,18 @@ The binary operations defined in \textbf{EL} are:
 \begin{itemize}
 \item arithmetical operations (\emph{SUM}, \emph{SUB}, \emph{MUL}, \emph{DIV});
 \item logic operations (\emph{AND}, \emph{OR});
-\item comparison operations (\emph{EQUAL}, \emph{NOT\_EQUAL}, \emph{LOWER}, \emph{GREATER}, \emph{LOWER\_EQUAL}, \emph{GREATER\_EQUAL}).
+\item comparison operations (\emph{EQUAL}, \emph{NOT\_EQUAL}, \emph{LOWER}, \emph{GREATER}, \emph{LOWER\_EQUAL}, \emph{GREATER\_EQUAL});
+\item access operations (\emph{VALUE\_ACCESS}, \emph{SQUARE\_ACCESS}).
 \end{itemize}
-An example is:\\
+An example of arithmetical operation is:
+
 \textbf{EL} instruction:
 \begin{table}[H]
 \centering
-\begin{tabular}{ll}
-$Istr_1$ & \$x=\$y+\$w+\$z
+\begin{tabular}{l}
+\$x=\$y+\$w+\$z
 \end{tabular}
 \end{table}
-\tab\\
 Intermediate representation:
 \begin{table}[H]
 \centering
@@ -23,4 +24,28 @@ $Instr_2$ & op: ADD\tab arg1: $\$x_1$\tab arg2: \$z\tab result: $\$x_2$\tab true
 $Instr_3$ & op: ASSIGN\tab arg1: $\$x_2$\tab result: \$x\tab true: NULL\tab false: NULL\tab next: $Istr_4$\\
 $Instr_4$ & \ldots
 \end{tabular}
-\end{table} 
+\end{table}
+
+An example of access operation is:
+
+\textbf{EL} instruction:
+\begin{table}[H]
+\centering
+\begin{tabular}{l}
+\$x=\$a[\$i]
+\end{tabular}
+\end{table}
+Intermediate representation:
+\begin{table}[H]
+\centering
+\begin{tabular}{ll}
+$Instr_1$ & op: SQUARE\_ACCESS\tab arg1: \$a\tab arg2: \$i\tab result: $\$x_1$\tab true: NULL\tab false: NULL\tab next: $Istr_2$\\
+$Instr_2$ & op: ASSIGN\tab arg1: $\$x_1$\tab result: \$x\tab true: NULL\tab false: NULL\tab next: $Istr_3$\\
+$Instr_3$ & \ldots
+\end{tabular}
+\end{table}
+
+
+
+
+
