@@ -17,14 +17,14 @@ else \{\\
 Intermediate representation:
 \begin{table}[H]
 \centering
-\begin{tabular}{ll}
-$Instr_1$ & op: L\_COMPARISON\tab arg1: \$a \tab arg2: \$b \tab result: $t_1$\tab true: NULL\tab false: NULL\tab next: $Istr_2$\\
-$Instr_2$ & op: BNEQ \tab arg1: $t_1$ \tab arg2: NULL result: NULL \tab true: \emph{TRUE}\tab false: \emph{FALSE}\tab next: NULL\\
-\emph{Label} & \emph{TRUE}\\
-$Instr_3$ & op: ASSIGNMENT\tab arg1: \$y \tab result: \$x \tab true: NULL \emph{BODY}\tab false: NULL \tab next: \emph{OUT}\\
-\emph{Label} & \emph{FALSE}\\
-$Instr_4$ & op: ASSIGNMENT\tab arg1: \$z \tab result: \$x \tab true: NULL \emph{BODY}\tab false: NULL \tab next: \emph{OUT}\\
+\begin{tabular}{llllll}
+$Instr_1$ & op: GREATER\_EQUAL & arg1: \$a & arg2: \$b & result: $t_1$ & jump: \emph{nil}\\
+$Instr_2$ & op: C\_JUMP & arg1: $t_1$ & arg2: \emph{nil} & result: \emph{nil} & jump: \emph{ELSE}\\
+$Instr_3$ & op: ASSIGNMENT & arg1: \$y & arg2: \emph{nil} & result: \$x & jump: \emph{nil}\\
+$Instr_4$ & op: U\_JUMP& arg1: \emph{nil} & arg2: \emph{nil} & result: \emph{nil} & jump: \emph{OUT}\\
+\emph{Label} & \emph{ELSE}\\
+$Instr_5$ & op: ASSIGNMENT & arg1: \$z & arg2: \emph{nil} & result: \$x & jump: \emph{nil}\\
 \emph{Label} & \emph{OUT}\\
-$Instr_5$ & \dots\\
+$Instr_6$ & \dots\\
 \end{tabular}
 \end{table}

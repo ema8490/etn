@@ -18,12 +18,10 @@ type Intruction struct{
 	arg1	Symbol
 	arg2	Symbol
 	result	Symbol
-	true	*Instruction
-	false	*Instruction
-	next	*Instruction
+	jump	*Instruction
 }
 \end{lstlisting}
-
+All the instructions will be stored in a array, in this way there is no need to have a field of the data structure that points to the next instruction. In case of a jump, conditional or unconditional, the next, possible, instruction is stored in the field \emph{jump}.
 
 \input{binaryOp.tex} 
 \input{unaryOp.tex}

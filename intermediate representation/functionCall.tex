@@ -13,12 +13,12 @@ becomes:
 
 \begin{table}[H]
 \centering
-\begin{tabular}{ll}
-$Instr_1$ & op: PARAM \tab arg1: "\%d" \tab arg2: NULL \tab result: NULL\tab true: NULL\tab false: NULL\tab next: $Istr_2$\\
-$Instr_2$ & op: ADD \tab arg1: \$k \tab arg2: 1 \tab result: $t_1$ \tab true: \emph{TRUE}\tab false: \emph{FALSE}\tab next: $Instr_3$\\
-$Instr_3$ & op: PARAM \tab arg1: $t_1$ \tab arg2: NULL \tab result: NULL \tab true: NULL \tab false: NULL \tab next: $Instr_4$\\
-$Instr_4$ & op: CALL \tab arg1: some\_function \tab arg2: 2 \tab result: $t_2$ \tab true: NULL \tab false: NULL \tab next: $Instr_5$\\
-$Instr_5$ & op: ASSIGNMENT \tab arg1: $t_2$ \tab arg2: NULL \tab result: \$x \tab true: NULL \tab false: NULL \tab next: $Instr_6$\\
+\begin{tabular}{llllll}
+$Instr_1$ & op: PARAM & arg1: "\%d" & arg2: \emph{nil} & result: \emph{nil}& jump: \emph{nil}\\
+$Instr_2$ & op: ADD & arg1: \$k & arg2: 1 & result: $t_1$ & jump: \emph{nil}\\
+$Instr_3$ & op: PARAM & arg1: $t_1$ & arg2: \emph{nil} & result: \emph{nil} & jump: \emph{nil}\\
+$Instr_4$ & op: CALL & arg1: some\_function & arg2: 2 & result: $t_2$ & jump: \emph{nil}\\
+$Instr_5$ & op: ASSIGNMENT & arg1: $t_2$ & arg2: \emph{nil} & result: \$x & jump: \emph{nil}\\
 $Instr_6$ & \dots\\
 \end{tabular}
 \end{table}

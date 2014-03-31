@@ -13,18 +13,16 @@ for \$i = 0; \$i $<$ 10; \$i = \$i + 1 \{\\
 Intermediate representation:
 \begin{table}[H]
 \centering
-\begin{tabular}{ll}
-$Instr_1$ & op: ASSIGNMENT\tab arg1: 0\tab arg2: NULL\tab result: $\$i$\tab true: NULL\tab false: NULL\tab next: $Istr_2$\\
+\begin{tabular}{llllll}
+$Instr_1$ & op: ASSIGNMENT & arg1: 0 & arg2: \emph{nil} & result: $\$i$ & jump: \emph{nil}\\
 \emph{Label} & \emph{CONDITION}\\
-$Instr_2$ & op: LOWER\tab arg1: \$i\tab arg2: 10 result: $t_1$\tab true: NULL\tab false: NULL\tab next: $Istr_3$\\
-$Instr_3$ & op: JUMP\tab arg1: $t_1$\tab arg2: NULL\tab true: \emph{BODY}\tab false: \emph{OUT}\tab next: NULL\\
-\emph{Label} & \emph{BODY}\\
-$Instr_4$ & op: U\_JUMP\tab arg1: NULL\tab arg2: NULL\tab true: NULL\tab false: NULL\tab next: \emph{OUT}\\
-$Instr_5$ & op: ADD\tab arg1: \$i\tab arg2: 1\tab result: $\$i_1$\tab true: NULL\tab false: NULL\tab next: $Instr_6$\\
-$Instr_6$ & op: ASSIGNMENT\tab arg1: $\$i_1$\tab arg2: NULL\tab result: $\$i$\tab true: NULL\tab false: NULL\tab next: $Instr_7$\\
-$Instr_7$ & op: U\_JUMP\tab arg1: NULL\tab arg2: NULL\tab true: NULL\tab false: NULL\tab \emph{CONDITION}\\
+$Instr_2$ & op: GREATER\_EQUAL & arg1: \$i & arg2: 10  & result: $t_1$ & jump: \emph{nil}\\
+$Instr_3$ & op: C\_JUMP & arg1: $t_1$ & arg2: \emph{nil} & result: \emph{nil} & jump: \emph{OUT} \\
+$Instr_4$ & op: ADD & arg1: \$i & arg2: 1 & result: $\$i_1$ & jump: \emph{nil}\\
+$Instr_5$ & op: ASSIGNMENT & arg1: $\$i_1$ & arg2: \emph{nil} & result: $\$i$ & jump: \emph{nil}\\
+$Instr_6$ & op: U\_JUMP & arg1: \emph{nil} & arg2: \emph{nil} & result: \emph{nil} & jump: \emph{CONDITION}\\
 \emph{Label} & \emph{OUT}\\
-$Instr_8$ & \dots\\
+$Instr_7$ & \dots\\
 \end{tabular}
 \end{table}
 Here's an example of \emph{continue} keyword:
@@ -41,16 +39,15 @@ for \$i = 0; \$i $<$ 10; \$i = \$i + 1 \{\\
 Intermediate representation:
 \begin{table}[H]
 \centering
-\begin{tabular}{ll}
-$Instr_1$ & op: ASSIGNMENT\tab arg1: 0\tab arg2: NULL\tab result: $\$i$\tab true: NULL\tab false: NULL\tab next: $Istr_2$\\
+\begin{tabular}{llllll}
+$Instr_1$ & op: ASSIGNMENT & arg1: 0 & arg2: \emph{nil} & result: $\$i$ & jump: \emph{nil}\\
 \emph{Label} & \emph{CONDITION}\\
-$Instr_2$ & op: LOWER\tab arg1: \$i\tab arg2: 10 result: $t_1$\tab true: NULL\tab false: NULL\tab next: $Istr_3$\\
-$Instr_3$ & op: JUMP\tab arg1: $t_1$\tab arg2: NULL\tab true: \emph{BODY}\tab false: \emph{OUT}\tab next: NULL\\
-\emph{Label} & \emph{BODY}\\
-$Instr_4$ & op: U\_JUMP\tab arg1: NULL\tab arg2: NULL\tab true: NULL\tab false: NULL\tab next: \emph{CONDITION}\\
-$Instr_5$ & op: ADD\tab arg1: \$i\tab arg2: 1\tab result: $\$i_1$\tab true: NULL\tab false: NULL\tab next: $Instr_6$\\
-$Instr_6$ & op: ASSIGNMENT\tab arg1: $\$i_1$\tab arg2: NULL\tab result: $\$i$\tab true: NULL\tab false: NULL\tab next: $Instr_7$\\
-$Instr_7$ & op: U\_JUMP\tab arg1: NULL\tab arg2: NULL\tab true: NULL\tab false: NULL\tab next: \emph{CONDITION}\\
+$Instr_2$ & op: GREATER\_EQUAL & arg1: \$i & arg2: 10  & result: $t_1$ & jump: \emph{nil}\\
+$Instr_3$ & op: C\_JUMP & arg1: $t_1$ & arg2: \emph{nil} & result: \emph{nil} & jump: \emph{OUT}\\
+$Instr_4$ & op: U\_JUMP & arg1: \emph{nil} & arg2: \emph{nil} & result: \emph{nil} & jump: \emph{CONDITION}\\
+$Instr_5$ & op: ADD & arg1: \$i & arg2: 1 & result: $\$i_1$ & jump: \emph{nil}\\
+$Instr_6$ & op: ASSIGNMENT & arg1: $\$i_1$ & arg2: \emph{nil} & result: $\$i$ & jump: \emph{nil}\\
+$Instr_7$ & op: U\_JUMP & arg1: \emph{nil} & arg2: \emph{nil} & result: \emph{nil} & jump: \emph{CONDITION}\\
 \emph{Label} & \emph{OUT}\\
 $Instr_8$ & \dots\\
 \end{tabular}
