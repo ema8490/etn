@@ -1,0 +1,3 @@
+ElScript struct {
+	Content string
+}
