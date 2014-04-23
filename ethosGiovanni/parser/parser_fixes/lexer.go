@@ -1,11 +1,12 @@
 package main
 
 import (
-	"../util"
+	"../../util"
 	"fmt"
 	"regexp"
 	"bufio"
 	"os"
+	"strings"
 )
 
 const (
@@ -292,7 +293,9 @@ func alphasHandler(value []byte, lex *Lexer, lval *yySymType) int {
 	for p, more := lex.Peek(); more; p, more = lex.Peek() {
 		matchedA, _ := regexp.Match(REs[ALPHA][0], p)
 		matchedD, _ := regexp.Match(REs[DIGIT][0], p)
-		if matchedA || matchedD {
+		matchedPath, _ := regexp.Match(REs[SLASH][0], p)
+
+		if matchedA || matchedD || matchedPath{
 			lex.Next()
 			value = append(value, p[0])
 		} else {
@@ -331,6 +334,10 @@ func alphasHandler(value []byte, lex *Lexer, lval *yySymType) int {
 		return VAR
 	case "new":
 		return NEW
+	}
+
+	if(strings.Contains(string(value),"/")){
+		return PATH
 	}
 
 	return STRING_LITERAL
